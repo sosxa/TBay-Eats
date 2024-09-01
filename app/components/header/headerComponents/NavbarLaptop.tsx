@@ -4,9 +4,10 @@ import fetchUserType from './fetchUserType';
 
 interface NavBarLaptopProps {
     className?: string;
+    onCartClick: () => void;
 }
 
-const NavbarLaptop: React.FC<NavBarLaptopProps> = ({ className }) => {
+const NavbarLaptop: React.FC<NavBarLaptopProps> = ({ className, onCartClick }) => {
     const [userType, setUserType] = useState<any>("");
 
     useEffect(() => {
@@ -54,7 +55,7 @@ const NavbarLaptop: React.FC<NavBarLaptopProps> = ({ className }) => {
                             <a href='/login'>Sign In</a>
                         </li>
                         <li>
-                            <button className=''>Cart</button>
+                            <button className='' onClick={onCartClick}>Cart</button>
                         </li>
                     </ul>
                 </div>
