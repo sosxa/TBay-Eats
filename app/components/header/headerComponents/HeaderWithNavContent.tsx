@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Image from 'next/image';
 import cuate from "../../../cuate.png";
 import FormHeader from '../../forms/FormHeader';
@@ -37,13 +37,15 @@ const HeaderWithNavContent = () => {
             title="Authentic local food at Tbay"
             para="TBayEAT is a courier service in which authentic home cook food is delivered to a customer"
           >
-            <SearchBtn
-              divClassName='flex sm:translate-x-0'
-              searchInputClass='mt-5 w-[28rem] h-[3rem] rounded-bl-lg text-black pl-2'
-              buttonClassName="text-white float-end translate-y-5 h-[3.1rem] bottom-[4.5rem] bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-br-lg text-sm px-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              buttonName='Search'
-              placeholder='Search local food here! '
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <SearchBtn
+                divClassName='flex sm:translate-x-0'
+                searchInputClass='mt-5 w-[28rem] h-[3rem] rounded-bl-lg text-black pl-2'
+                buttonClassName="text-white float-end translate-y-5 h-[3.1rem] bottom-[4.5rem] bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-br-lg text-sm px-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                buttonName='Search'
+                placeholder='Search local food here! '
+              />
+            </Suspense>
           </FormHeader>
           <Image
             className='hidden lg:flex'
