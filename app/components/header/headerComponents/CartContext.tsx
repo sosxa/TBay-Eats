@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useReducer, useContext, ReactNode, useEffect } from 'react';
+import React, { createContext, useReducer, useContext, ReactNode, useEffect, useState } from 'react';
 
 // Define types for the cart item and action
 interface CartItem {
@@ -94,20 +94,25 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
   }
 };
 
-
-
-
-
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // Initialize state from local storage
-  const [state, dispatch] = useReducer(cartReducer, {
-    items: JSON.parse(localStorage.getItem('cart') || '[]')
-  });
+  const [state, dispatch] = useReducer(cartReducer, { items: [] });
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Initialize state from local storage on the client side
+  useEffect(() => {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      dispatch({ type: 'ADD_ITEM', payload: JSON.parse(storedCart) });
+    }
+    setIsHydrated(true); // Mark as hydrated to prevent rendering issues
+  }, []);
 
   // Sync local storage with state changes
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(state.items));
-  }, [state.items]);
+    if (isHydrated) {
+      localStorage.setItem('cart', JSON.stringify(state.items));
+    }
+  }, [state.items, isHydrated]);
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>
@@ -123,4 +128,3 @@ export const useCart = () => {
   }
   return context;
 };
-
