@@ -6,7 +6,7 @@ const page = () => {
     return (
         <div>
             <Header />
-            <OwnerClient />
+{/*             <OwnerClient /> */}
             Change your email here!
             <FooterLayout />
         </div>
