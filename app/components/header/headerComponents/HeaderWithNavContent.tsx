@@ -1,7 +1,8 @@
 'use client';
+
 import React, { Suspense, useState } from 'react';
 import Image from 'next/image';
-import cuate from "../../../cuate.png";
+import cuate from '../../../cuate.png';
 import FormHeader from '../../forms/FormHeader';
 import SearchBtn from './SearchBtn';
 import NavbarLaptop from './NavbarLaptop';
@@ -43,13 +44,13 @@ const HeaderWithNavContent = () => {
                 searchInputClass='mt-5 w-[28rem] h-[3rem] rounded-bl-lg text-black pl-2'
                 buttonClassName="text-white float-end translate-y-5 h-[3.1rem] bottom-[4.5rem] bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-br-lg text-sm px-4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 buttonName='Search'
-                placeholder='Search local food here! '
+                placeholder='Search local food here!'
               />
             </Suspense>
           </FormHeader>
           <Image
             className='hidden lg:flex'
-            alt="image of chief"
+            alt="image of chef"
             src={cuate}
             width={400}
             height={400}
