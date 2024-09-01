@@ -1,0 +1,8 @@
+make sure the username and email is unique when the user is signing uo 
+ - look through the table and make sure the username and email isn't being used yet 
+
+make sure the username is 16 characters long max 
+ - get the length of it and make sure its <= 16 
+ - than update some state variable to dispolay a message saying that the username is too long
+
+have admin users and customer users (role authentication)
