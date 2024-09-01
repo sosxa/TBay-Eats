@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react'
-// Importing image
-import diliv from "/Users/mac/Desktop/projects/tbay/app/diliv.png"
+import diliv from "../../diliv.png"
 import Image from 'next/image'
 
 interface ContactUsProps {
