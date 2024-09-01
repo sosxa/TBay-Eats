@@ -1,14 +1,14 @@
 'use client';
-import React, { useState } from 'react'
-import diliv from "../../diliv.png"
-import Image from 'next/image'
+import React, { useState } from 'react';
+// import diliv from "../../diliv.png";
+import Image from 'next/image';
 
 interface ContactUsProps {
     className?: string;
 }
 
 // Defining the page component
-const ContactUs:React.FC<ContactUsProps> = ({className}) => {
+const ContactUs: React.FC<ContactUsProps> = ({ className }) => {
 
     // Using React hooks to manage state for name, email, and message
     const [name, setName] = useState('');
@@ -36,12 +36,12 @@ const ContactUs:React.FC<ContactUsProps> = ({className}) => {
         }
     };
 
-    
+
 
     // Rendering the page
     return (
         <>
-           
+
             <div className={`flex pt-[10rem] pb-[5rem] ${className}`}>
                 <div className='block text-center translate-x-[12.5%] w-[80%] lg:text-left lg:translate-x-[3rem] xl:translate-x-[8rem] 2xl:translate-x-[15rem]'>
                     <h4 className=' text-2xl tracking-wide sm:text-[2.5rem] lg:w-[60%] xl:w-1/2'>Do you have a question or want to become a seller?</h4>
@@ -74,12 +74,12 @@ const ContactUs:React.FC<ContactUsProps> = ({className}) => {
                         </form>
                         {/* Image */}
                         <div className='hidden lg:block lg:float-right lg:translate-x-[5rem] xl:translate-x-[3rem] 2xl:translate-x-[8rem]' >
-                            <Image
+                            {/* <Image
                                 src={diliv}
                                 width={600}
                                 height={600}
                                 alt="cartoon drawing of dilvery man on moped "
-                            />
+                            /> */}
                         </div>
                     </div>
                 </div>
