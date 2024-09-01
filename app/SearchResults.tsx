@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import getProductResults from './components/header/headerComponents/getProductResults';
 import getComboResults from './components/header/headerComponents/getComboResults';
 import getRestaurantResults from './components/header/headerComponents/getRestaurantResults';
-import Image from 'next/image';
-import defaultPfp from "../../../defaultPfp.png";
-import defaultBanner from "../../../defaultBanner.png";
+import defaultPfp from "./defaultPfp.png"
+import defaultBanner from "./defaultBanner.png"
 import { useCart } from './components/header/headerComponents/CartContext';
 import SkeletonLoader from './SkeletonLoader';
 import { useRouter } from 'next/navigation';
