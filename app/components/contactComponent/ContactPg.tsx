@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react'
-import diliv from "../../diliv.png"
+// import diliv from "../../diliv.png"
 import Image from 'next/image'
 
 interface ContactUsProps {
@@ -73,14 +73,14 @@ const ContactUs:React.FC<ContactUsProps> = ({className}) => {
                             </div>
                         </form>
                         {/* Image */}
-                        <div className='hidden lg:block lg:float-right lg:translate-x-[5rem] xl:translate-x-[3rem] 2xl:translate-x-[8rem]' >
+{/*                         <div className='hidden lg:block lg:float-right lg:translate-x-[5rem] xl:translate-x-[3rem] 2xl:translate-x-[8rem]' >
                             <Image
                                 src={diliv}
                                 width={600}
                                 height={600}
                                 alt="cartoon drawing of dilvery man on moped "
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
