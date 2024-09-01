@@ -141,7 +141,7 @@ const NavbarLaptop: React.FC<NavBarLaptopProps> = ({ className, onCartClick }) =
                             <a href='/login'>Sign In</a>
                         </li>
                         <li>
-                            <button onClick={onCartClick}>Cart</button>
+<button className='' onClick={onCartClick}>Cart</button>
                         </li>
                     </ul>
                 </div>
