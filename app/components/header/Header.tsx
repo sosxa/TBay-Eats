@@ -11,7 +11,9 @@ const Header = () => {
         // <div className='w-auto z-auto bg-custom-green mb-[5rem]'>
         //     <div className='justify-center'>
         <>
-            <NavbarLaptop className='hidden lg:inline lg:mt-10' />
+<NavbarLaptop className='hidden lg:inline lg:mt-10' onCartClick={function (): void {
+                throw new Error('Function not implemented.')
+            }} />
             <NavbarMobile className='lg:hidden' />
         </>
         //  </div>
