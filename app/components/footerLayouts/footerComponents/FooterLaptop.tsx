@@ -38,7 +38,7 @@ const FooterLaptop: React.FC<FooterProps> = ({ className, user }) => {
                             <a className='text-white font-sans text-xl' href="/profile">Profile</a>
                         </li>
                         <li className={user ? 'pt-8 pb-8' : "hidden"}>
-                            <a className='text-white font-sans text-xl' href="/sign-out">Sign Out</a>
+                            <a className='text-white font-sans text-xl' href="/signout">Sign Out</a>
                         </li>
                     </ul>
                 </div>
