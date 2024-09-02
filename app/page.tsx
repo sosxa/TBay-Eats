@@ -3,15 +3,24 @@ import FooterLayout from "./components/footerLayouts/FooterLayout";
 import HeaderWithNav from "./components/header/HeaderWithNav";
 import 'animate.css';
 import ClientSideWrapper from "@/components/ClientSideWrapper";
+import { createClient } from '@/utils/supabase/server';
 import SearchResults from "./SearchResults";
+import { redirect } from 'next/navigation'
 
 
-const Home = ({ searchParams }: {
+const Home = async ({ searchParams }: {
   searchParams?: {
     search?: string;
   }
 }) => {
+
   const search = searchParams?.search || "";
+  const supabase = createClient();
+  const { data: { session } } = await supabase.auth.getSession()
+
+  if (!session) {
+    redirect("/login");
+  }
 
   return (
     <>
