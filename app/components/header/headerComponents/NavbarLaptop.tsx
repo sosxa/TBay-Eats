@@ -8,30 +8,37 @@ interface NavBarLaptopProps {
 }
 
 const NavbarLaptop: React.FC<NavBarLaptopProps> = ({ className, onCartClick }) => {
-    const [userType, setUserType] = useState<any>("");
+    const [userType, setUserType] = useState<any>(null);
+    const [loading, setLoading] = useState<boolean>(true); // Add loading state
 
     useEffect(() => {
         const getUserType = async () => {
-            const zz = await fetchUserType();
-            if (zz !== undefined || zz !== null) {
-                setUserType(zz);
-                return;
-            }
-            if (zz === null || zz === undefined) {
-                setUserType(null)
-                return;
+            setLoading(true); // Start loading
+            try {
+                const zz = await fetchUserType();
+                setUserType(zz ?? null); // Set userType or null
+            } catch (error) {
+                console.error('Failed to fetch user type', error);
+                setUserType(null); // Ensure userType is null if there's an error
+            } finally {
+                setLoading(false); // End loading
             }
         };
 
-        getUserType(); // Added missing call to getUserType()
+        getUserType(); // Fetch user type
     }, []);
 
+    if (loading) {
+        return <div></div>; // Render loading indicator or null
+    }
 
     return (
         <div className={className}>
             <div className='pt-8 bg-custom-green z-50'>
                 <div className='flex justify-center items-center justify-space pb-6 text-white'>
-                    <h4 className='flex mr-20 font-bold text-2xl text-white'><a href='/'>TBayEAT</a></h4>
+                    <h4 className='flex mr-20 font-bold text-2xl text-white'>
+                        <a href='/'>TBayEAT</a>
+                    </h4>
                     <ul className='flex gap-12 text-lg'>
                         <li>
                             <a href='/'>Home</a>
@@ -40,18 +47,18 @@ const NavbarLaptop: React.FC<NavBarLaptopProps> = ({ className, onCartClick }) =
                             <a href='/about'>About</a>
                         </li>
                         <li>
-                            <a href='/menu'>Menu</a>
+                            <a href='/restaurant'>Restaurants</a>
                         </li>
                         <li>
                             <a href='/contact'>Contact</a>
                         </li>
-                        <li className={userType !== null ? 'block' : 'hidden'}>
+                        <li className={userType ? 'block' : 'hidden'}>
                             <a href='/profile'>Profile</a>
                         </li>
-                        <li className={userType !== null ? 'block' : 'hidden'}>
+                        <li className={userType ? 'block' : 'hidden'}>
                             <a href='/signout'>Sign Out</a>
                         </li>
-                        <li className={userType === null ? 'block' : 'hidden'}>
+                        <li className={!userType ? 'block' : 'hidden'}>
                             <a href='/login'>Sign In</a>
                         </li>
                         <li>
