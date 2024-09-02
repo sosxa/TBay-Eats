@@ -17,15 +17,16 @@ import Link from 'next/link';
 import DecideClient from '@/app/components/sectionComponent/DecideClient'
 import ImageUploader from '@/app/components/profileImgComponent/profileClient'
 import DecideAside from '../aside/DecideAside';
+import { redirect } from 'next/navigation'
 
 const page = async () => {
   const supabase = createClient();
 
   // fetching the user table data and pulling their username 
-  const { data: profile } = await supabase
-    .from('profile')
-    .select('user');
-  const user = profile && profile[0] ? profile[0].user : null;
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) {
+    redirect("/login");
+  }
   return (
     <>
       <Header />
@@ -36,8 +37,8 @@ const page = async () => {
         <DecideClient />
 
         <div className='sm:block w-full xl:flex xl:px-[8rem] xl:gap-[15rem]'>
-                    <div className='px-[0rem] sm:px-[5rem] md:px-[8rem] lg:px-[10rem] xl:p-0 xl:flex-1 xl:w-1/2'>
-            {/* <RestaurantClient classname={user === "owner" ? "block" : "hidden"} searchParams={{ message: '' }} /> */} 
+          <div className='px-[0rem] sm:px-[5rem] md:px-[8rem] lg:px-[10rem] xl:p-0 xl:flex-1 xl:w-1/2'>
+            {/* <RestaurantClient classname={user === "owner" ? "block" : "hidden"} searchParams={{ message: '' }} /> */}
             <DecideAside />
           </div>
           <div className='sm:px-[5rem] md:px-[8rem] lg:px-[10rem] pt-[4rem] xl:p-0 xl:flex-5 xl:w-1/2'>
