@@ -1,8 +1,11 @@
+'use server';
 import React, { Suspense, lazy } from 'react';
 import FooterLayout from '@/app/components/footerLayouts/FooterLayout';
 import Header from '../../components/header/Header';
 import ImageUploader from '@/app/components/profileImgComponent/profileClient';
 import DecideClient from '@/app/components/sectionComponent/DecideClient';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation'
 
 // Dynamically import components
 const ComboClient = lazy(() => import('./ComboClient'));
@@ -10,7 +13,12 @@ const TestDouble = lazy(() => import('./TestDouble'));
 const SingleProductLayout = lazy(() => import('./SingleProductLayout'));
 const ComboProductLayout = lazy(() => import('./ComboProductLayout'));
 
-const Page = () => {
+const Page = async () => {
+  const supabase = createClient();
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) {
+      redirect("/login");
+  }
   return (
     <div>
       <Header />
