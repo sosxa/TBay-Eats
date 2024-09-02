@@ -12,6 +12,7 @@ import uploadComboImg from './comboUploadComponents/uploadComboImg';
 import duplicateComboItem from './comboUploadComponents/duplicateComboItem';
 
 const ComboClient: React.FC = () => {
+    const [submitMsg, setSubmitMsg] = useState("Finish");
     const [isOpen, setIsOpen] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
     const modalRef = useRef<HTMLDivElement>(null);
@@ -147,6 +148,7 @@ const ComboClient: React.FC = () => {
 
     const submitForm = useCallback(
         async (formData: FormData) => {
+            setSubmitMsg("Submitting...");
             try {
                 let isValid = true;
 
@@ -230,6 +232,7 @@ const ComboClient: React.FC = () => {
             } catch (error) {
                 throw error;
             }
+            setSubmitMsg("Finish");
         },
         [selectedFiles, selectedProducts, comboName, comboDesc, comboPrice, comboDuplicate]
     );
@@ -255,12 +258,12 @@ const ComboClient: React.FC = () => {
             try {
                 const productInfo = await getProductNames(); // Replace with your actual API call
                 const mappedProducts: { value: string, label: string, ogValue: string }[] = [];
-                
+
                 if (productInfo) {
                     productInfo.forEach(product => {
                         // Extract the `ogName` for the current product
                         const ogName = product.ogName;
-                        
+
                         // Iterate over price_size
                         product.price_size.forEach((size: any) => {
                             mappedProducts.push({
@@ -270,7 +273,7 @@ const ComboClient: React.FC = () => {
                             });
                         });
                     });
-    
+
                     // Update the state with the mapped products
                     setAllProducts(mappedProducts);
                     console.log(mappedProducts); // Log the mapped products with sizes and prices
@@ -279,10 +282,10 @@ const ComboClient: React.FC = () => {
                 console.error("Error fetching product info:", error);
             }
         };
-    
+
         fetchData();
     }, []);
-    
+
 
 
     const gettingPfp = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -303,6 +306,20 @@ const ComboClient: React.FC = () => {
             }
         }
     };
+
+    useEffect(() => {
+        // Disable scrolling on body when modal is open
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+
+        // Cleanup function to re-enable scrolling when modal is closed
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [isOpen]);
 
     return (
         <div>
@@ -614,7 +631,7 @@ const ComboClient: React.FC = () => {
                                                 Previous Step
                                             </button>
                                             <button onClick={closeModal} className="bg-custom-green text-white px-4 py-2 rounded">
-                                                Finish
+                                                {submitMsg}
                                             </button>
                                         </div>
                                     </div>
