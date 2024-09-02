@@ -22,7 +22,7 @@ const FooterMobile: React.FC<FooterMobileProps> = ({ className, user }) => {
                             <a className='text-white font-sans text-xl' href="/about">About</a>
                         </li>
                         <li className='pb-6 px-4'>
-                            <a className='text-white font-sans text-xl' href="/menu">Menu</a>
+                            <a className='text-white font-sans text-xl' href="/restaurant">Restaurants</a>
                         </li>
                         <li className='pb-6 px-4'>
                             <a className='text-white font-sans text-xl' href="/contact">Contact</a>
