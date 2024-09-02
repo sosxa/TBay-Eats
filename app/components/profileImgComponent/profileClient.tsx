@@ -140,15 +140,10 @@ const ImageUploader = () => {
         <>
             {loading ? (
                 <>
-                    <div className='-translate-y-2 mb-[8rem]'>
+                    <div className=''>
                         {loading && <Skeleton
                             className="xl:hidden w-full absolute -top-[7rem] left-0 z-0 h-[300px] xl:h-[400px]"
-                        // height={300}
                         />}
-                        {/* {loading && <Skeleton
-                            className="xl:hidden xl:w-full xl:absolute xl:-top-[7rem] xl:left-0 xl:z-0"
-                            height={400}
-                        />} */}
                         <div className='absolute -translate-y-[11rem] translate-x-20'>
                             {loading && <Skeleton
                                 width={275}
@@ -161,7 +156,7 @@ const ImageUploader = () => {
                 </>
             ) : (
                 <>
-                    <section className="relative pt-40 pb-24">
+                    <section className="relative pt-40 lg:pb-0 pb-[4rem]">
                         {ifDbBanner === null || ifDbBanner === undefined ? (
                             <div>
                                 <Image
