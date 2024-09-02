@@ -61,7 +61,7 @@ const NavbarMobile: React.FC<NavbarMobileProps> = ({ className }) => {
                                     <a href='/about' className='block text-center hover:bg-gray-200 rounded'>About</a>
                                 </li>
                                 <li className='w-full'>
-                                    <a href='/menu' className='block text-center hover:bg-gray-200 rounded'>Menu</a>
+                                    <a href='/restaurant' className='block text-center hover:bg-gray-200 rounded'>Restaurants</a>
                                 </li>
                                 <li className='w-full'>
                                     <a href='/contact' className='block text-center hover:bg-gray-200 rounded'>Contact</a>
