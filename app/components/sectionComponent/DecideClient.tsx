@@ -32,10 +32,11 @@ const DecideClient = () => {
         <div>
             {/* Render loading indicator if data is still being fetched */}
             {loading && (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='2xl:-translate-y-[7rem] xl:-translate-y-[7rem] lg:-translate-y-[5rem] md:-translate-y-[1rem]'>
-                    <div className="inline-flex rounded-md shadow-sm mb-[8rem]" role="group">
+                <div className='pb-[10rem]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} 
+                >
+                    
                         <Skeleton width={250} height={50} className='rounded-2xl'/>
-                    </div>
+
                 </div>
             )}
 
