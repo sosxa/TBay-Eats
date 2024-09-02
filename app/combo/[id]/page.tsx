@@ -8,6 +8,8 @@ import SuggestionProducts from '@/app/product/[id]/idComponents/suggestionProduc
 import ComboDescAndReviews from './comboComponents/ComboDescAndReviews';
 import ComboInfo from './comboComponents/ComboInfo';
 import BreadCrums from './comboComponents/BreadCrums';
+import { redirect } from 'next/navigation'
+import { createClient } from '@/utils/supabase/server';
 
 interface Product {
     id: string;
@@ -37,6 +39,12 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
     if (!restaurantName) {
         return notFound();
+    }
+
+    const supabase = createClient();
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+        redirect("/login");
     }
 
     return (
