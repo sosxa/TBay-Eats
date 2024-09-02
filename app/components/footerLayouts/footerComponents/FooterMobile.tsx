@@ -37,7 +37,7 @@ const FooterMobile: React.FC<FooterMobileProps> = ({ className, user }) => {
                             <a className='text-white font-sans text-xl' href="/profile">Profile</a>
                         </li>
                         <li className={user ? 'pb-6 px-4' : "hidden"}>
-                            <a className='text-white font-sans text-xl' href="/sign-out">Sign Out</a>
+                            <a className='text-white font-sans text-xl' href="/signout">Sign Out</a>
                         </li>
                         <li className='pb-6 px-4'>
                             <p className='text-white pb-2'> Copyright &#169; 2024 TBayEats</p>
