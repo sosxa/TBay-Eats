@@ -16,7 +16,10 @@ const OwnerClient = ({ loading: parentLoading }: { loading: boolean }) => {
   }, [pathname]);
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='2xl:-translate-y-[7rem] xl:-translate-y-[7rem] lg:-translate-y-[5rem] md:-translate-y-[1rem]'>
+    <div
+      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      className='h-auto w-auto'
+    >
       <div className="inline-flex rounded-md shadow-sm mb-[8rem]" role="group">
         <button
           type="button"
