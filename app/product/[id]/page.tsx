@@ -1,3 +1,4 @@
+'use server';
 import dynamic from 'next/dynamic';
 import HeaderWithNav from '@/app/components/header/HeaderWithNav';
 import FooterLayout from '@/app/components/footerLayouts/FooterLayout';
@@ -5,7 +6,8 @@ import getProductById from '../getProductById';
 import { notFound } from 'next/navigation';
 import BreadCrums from '@/app/combo/[id]/comboComponents/BreadCrums';
 import HandleRelatedCombos from './otherItems/HandleRelatedCombos';
-
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation'
 
 // Lazy load components
 const ProductInfo = dynamic(() => import('./idComponents/ProductInfo'));
@@ -46,6 +48,11 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
     if (!restaurantInfo) {
         return notFound();
+    }
+    const supabase = createClient();
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+        redirect("/login");
     }
 
     const restaurantName = restaurantInfo.name;
