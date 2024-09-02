@@ -17,7 +17,7 @@ const TestDouble = () => {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    const [comboPrice, setComboPrice] = useState<string>('');
+    const [submitMsg, setSubmitMsg] = useState("Finish")
 
     const [itemName, setItemName] = useState<string>('');
     const [itemDesc, setItemDesc] = useState<string>('');
@@ -81,6 +81,7 @@ const TestDouble = () => {
 
     const submitForm = useCallback(
         async (formData: FormData) => {
+            setSubmitMsg("Submitting...")
             let isValid = true;
 
             const newInputs = [...inputs];
@@ -178,6 +179,7 @@ const TestDouble = () => {
             } catch (error) {
                 console.error('Error checking duplicate:', error);
             }
+            setSubmitMsg("Finish")
         },
         [sizes, selectedFiles, currentStep, inputs, itemName, itemDesc, selectedSpice, nameCheck]
     );
@@ -355,7 +357,19 @@ const TestDouble = () => {
         }
     };
 
+    useEffect(() => {
+        // Disable scrolling on body when modal is open
+        if (currentStep === 1 || currentStep === 2) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
 
+        // Cleanup function to re-enable scrolling when modal is closed
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [currentStep]);
 
 
     return (
@@ -737,7 +751,7 @@ const TestDouble = () => {
                                         Previous Step
                                     </button>
                                     <button onClick={closeModal} className="bg-custom-green text-white px-4 py-2 rounded">
-                                        Finish
+                                        {submitMsg}
                                     </button>
                                 </div>
 
