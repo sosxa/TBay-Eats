@@ -26,7 +26,7 @@ const FooterLaptop: React.FC<FooterProps> = ({ className, user }) => {
                             <a className='text-white font-sans text-xl' href="/about">About</a>
                         </li>
                         <li className='pt-8 pb-8'>
-                            <a className='text-white font-sans text-xl' href="/menu">Menu</a>
+                            <a className='text-white font-sans text-xl' href="/restaurant">Restaurants</a>
                         </li>
                         <li className='pt-8 pb-8'>
                             <a className='text-white font-sans text-xl' href="/contact">Contact</a>
