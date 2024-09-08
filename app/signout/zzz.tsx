@@ -36,25 +36,42 @@ export default async function zzz() {
 
 
     return (
-        profile && (
-            <div className='flex justify-center align-middle min-h-[25rem] mt-[15rem]'>
-                <div className='grid h-60 rounded-lg shadow-lg place-items-center w-1/2 bg-white'>
-                    <section className='flex flex-col items-center'>
-
-                        <h3 className={session ? 'text-center text-4xl font-semibold w-[80%] mt-3' : "hidden"}>Are you sure you want to sign out {username}?</h3>
-                        <h3 className={!session ? 'text-center text-4xl font-semibold w-[80%] mt-3' : "hidden"}>Sorry but no user is currently logged in. Try visiting our Sign In page.</h3>
-                        <p className={!session ? 'text-center text-xl w-[80%] mt-5' : "hidden"}>Scroll to the top of this page and click "Sign In" on the navigation bar.</p>
-                        <div className='flex gap-4 grid-rows-1 mt-[2rem] mb-3'>
+        <div className='flex justify-center items-center'>
+            <div className='w-full max-w-md mx-4 sm:mx-8 bg-white shadow-lg rounded-lg p-6'>
+                <section className='flex flex-col items-center'>
+                    {session ? (
+                        <>
+                            <h3 className='text-center text-2xl font-semibold mb-4'>
+                                Are you sure you want to sign out?
+                            </h3>
+                            <p className='text-center text-lg mb-6'>
+                                Click the button below to sign out of your account.
+                            </p>
                             <form action={signOut}>
-                                <button className={session ? "bg-transparent hover:bg-custom-green text-custom-green font-semibold hover:text-white py-2 px-4 border border-custom-green hover:border-transparent rounded" : "hidden"}>
+                                <button
+                                    type='submit'
+                                    className='bg-custom-green text-white font-semibold py-2 px-4 rounded hover:bg-green-600 transition-colors'
+                                >
                                     Sign Out
                                 </button>
                             </form>
-                        </div>
-                    </section>
-                </div>
+                        </>
+                    ) : (
+                        <>
+                            <h3 className='text-center text-2xl font-semibold mb-4'>
+                                No user is currently logged in.
+                            </h3>
+                            <p className='text-center text-lg mb-6'>
+                                Please visit the Sign In page to log in.
+                            </p>
+                            <a href='/sign-in' className='text-custom-green font-semibold hover:underline'>
+                                Go to Sign In Page
+                            </a>
+                        </>
+                    )}
+                </section>
             </div>
-        )
+        </div>
     );
 }
 
