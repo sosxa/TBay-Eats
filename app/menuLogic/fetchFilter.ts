@@ -4,8 +4,19 @@ import { createClient } from '@/utils/supabase/server';
 const fetchFilter = async (filter: string | undefined, priceFilter: any[], type: string) => {
     const supabase = createClient();
 
+    // Replace "+" with a space and capitalize the first letter of each word
+    const capitalizeWords = (str: string) => {
+        return str
+            .replace(/\+/g, ' ') // Replace "+" with a space
+            .split(' ') // Split the string into words
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+            .join(' '); // Join the words back into a single string
+    };
+
+    const modifiedFilter = filter ? capitalizeWords(filter) : '';
+
     if (type === "combos") {
-        if (filter === "All") {
+        if (modifiedFilter === "All") {
 
             const { data: products, error: productError } = await supabase
                 .from('combo_info')
@@ -15,8 +26,6 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
             }
-
-
 
             // Initialize an array to hold the combined product data
             const productsWithImages = [];
@@ -45,26 +54,26 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                     const { data: images, error: imageError } = await supabase
                         .storage
                         .from('combo_img')
-                        .list(imagePath)
+                        .list(imagePath);
 
                     if (imageError) {
-                        throw Error('Error fetching image data: ' + imageError.message);
+                        throw new Error('Error fetching image data: ' + imageError.message);
                     }
 
-                    const { data: publicUrlData } = await supabase
-                        .storage
-                        .from('combo_img')
-                        .getPublicUrl(`${userId}/${product.ogName}/${images[0].name}`);
+                    if (images.length > 0) {
+                        const { data: publicUrlData } = await supabase
+                            .storage
+                            .from('combo_img')
+                            .getPublicUrl(`${userId}/${product.ogName}/${images[0].name}`);
 
+                        const finalUrl = publicUrlData.publicUrl;
 
-                    const finalUrl = publicUrlData.publicUrl;
-
-
-                    // Combine product data with the first image
-                    productsWithImages.push({
-                        ...product,
-                        finalUrl
-                    });
+                        // Combine product data with the first image
+                        productsWithImages.push({
+                            ...product,
+                            finalUrl
+                        });
+                    }
                 }
             }
 
@@ -86,12 +95,11 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
             // Iterate over each product to fetch associated images
             for (const product of products) {
                 // Check if any origin matches the filter
-                const originMatches = product.origin.some((originItem: any) => originItem.filter === filter);
+                const originMatches = product.origin.some((originItem: any) => originItem.filter === modifiedFilter);
 
                 const priceInRange = !priceFilter || (product.price >= priceFilter[0] && product.price <= priceFilter[1]);
 
-
-                if (!filter || originMatches && priceInRange) {
+                if (!modifiedFilter || originMatches && priceInRange) {
                     // Default image URL or handle case where user data might not be available
                     let finalUrl = '';
 
@@ -122,7 +130,6 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                             throw new Error('Error fetching image data: ' + imageError.message);
                         }
 
-
                         if (images.length > 0) {
                             const { data: publicUrlData } = await supabase
                                 .storage
@@ -144,14 +151,15 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                     });
                 }
             }
-            return productsWithImages
+            return productsWithImages;
         }
     }
 
     if (type === "products") {
 
-        if (filter === "All") {
+        if (modifiedFilter === "All") {
 
+            // Fetch active products
             const { data: products, error: productError } = await supabase
                 .from('product_info')
                 .select('*')
@@ -161,16 +169,15 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                 throw new Error('Error fetching product data: ' + productError.message);
             }
 
-
-
             // Initialize an array to hold the combined product data
             const productsWithImages = [];
 
             // Iterate over each product to fetch associated images
             for (const product of products) {
+                // Check if product price falls within the price filter range
                 const priceInRange = !priceFilter || (product.price_size[0].price >= priceFilter[0] && product.price_size[0].price <= priceFilter[1]);
-                // Fetch user ID based on the product's email
 
+                // Fetch user ID based on the product's email
                 const { data: user, error: userError } = await supabase
                     .from('profile')
                     .select('id')
@@ -191,31 +198,39 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                     const { data: images, error: imageError } = await supabase
                         .storage
                         .from('product_img')
-                        .list(imagePath)
+                        .list(imagePath);
 
                     if (imageError) {
-                        throw Error('Error fetching image data: ' + imageError.message);
+                        throw new Error('Error fetching image data: ' + imageError.message);
                     }
 
-                    const { data: publicUrlData } = await supabase
-                        .storage
-                        .from('product_img')
-                        .getPublicUrl(`${userId}/${product.ogName}/${images[0].name}`);
+                    if (images.length > 0) {
+                        // Get the public URL for the first image
+                        const { data: publicUrlData } = await supabase
+                            .storage
+                            .from('product_img')
+                            .getPublicUrl(`${userId}/${product.ogName}/${images[0].name}`);
 
+                        const finalUrl = publicUrlData.publicUrl;
 
-                    const finalUrl = publicUrlData.publicUrl;
-
-
-                    // Combine product data with the first image
-                    productsWithImages.push({
-                        ...product,
-                        finalUrl
-                    });
+                        // Combine product data with the first image
+                        productsWithImages.push({
+                            ...product,
+                            finalUrl
+                        });
+                    } else {
+                        // Handle the case where no images are found
+                        productsWithImages.push({
+                            ...product,
+                            finalUrl: null  // Or use a default image URL
+                        });
+                    }
                 }
             }
 
             return productsWithImages;
-        } else {
+        }
+        else {
             // Fetch all products with active status
             const { data: products, error: productError } = await supabase
                 .from('product_info')
@@ -232,13 +247,11 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
             // Iterate over each product to fetch associated images
             for (const product of products) {
                 // Check if any origin matches the filter
-                const originMatches = product.origin.some((originItem: any) => originItem.filter === filter);
-
+                const originMatches = product.origin.some((originItem: any) => originItem.filter === modifiedFilter);
 
                 const priceInRange = !priceFilter || (product.price_size[0].price >= priceFilter[0] && product.price_size[0].price <= priceFilter[1]);
 
-
-                if (!filter || originMatches && priceInRange) {
+                if (!modifiedFilter || originMatches && priceInRange) {
                     // Default image URL or handle case where user data might not be available
                     let finalUrl = '';
 
@@ -269,7 +282,6 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                             throw new Error('Error fetching image data: ' + imageError.message);
                         }
 
-
                         if (images.length > 0) {
                             const { data: publicUrlData } = await supabase
                                 .storage
@@ -291,7 +303,7 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                     });
                 }
             }
-            return productsWithImages
+            return productsWithImages;
         }
     }
 };
