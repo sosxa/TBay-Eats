@@ -79,110 +79,237 @@ const TestDouble = () => {
     const [productFilterErrMsg, setProductFilterErrMsg] = useState<string | null>("");
 
 
-    const submitForm = useCallback(
-        async (formData: FormData) => {
-            setSubmitMsg("Submitting...")
-            let isValid = true;
 
-            const newInputs = [...inputs];
-            const spices = [...selectedSpice];
+    
+    // const submitForm = useCallback(
+    //     async (formData: FormData) => {
+    //         setSubmitMsg("Submitting...")
+    //         let isValid = true;
 
-            selectedFiles.forEach((file, index) => {
-                formData.append(`file${index}`, file);
-            });
+    //         const newInputs = [...inputs];
+    //         const spices = [...selectedSpice];
 
-            const validSizes = ["small", "medium", "large"];
-            const sizes = inputs.map(input => input.size);
-            const uniqueSizes = new Set(sizes);
-            const validSizesFinal = sizes.every(size => validSizes.includes(size) && size && size !== 'null') && uniqueSizes.size === sizes.length;
+    //         selectedFiles.forEach((file, index) => {
+    //             formData.append(`file${index}`, file);
+    //         });
 
+    //         const validSizes = ["small", "medium", "large"];
+    //         const sizes = inputs.map(input => input.size);
+    //         const uniqueSizes = new Set(sizes);
+    //         const validSizesFinal = sizes.every(size => validSizes.includes(size) && size && size !== 'null') && uniqueSizes.size === sizes.length;
+
+    //         try {
+    //             const duplicate = await duplicateProducts(itemName);
+    //             setNameCheck(duplicate); // Update nameCheck state with duplicate result
+
+    //             if (duplicate && currentStep === 2) {
+    //                 setItemNameErr(true);
+    //                 setItemNameErrMsg("Can't have two of the same product names.");
+    //                 isValid = false;
+    //             }
+
+    //             if (!validSizesFinal && currentStep === 2) {
+    //                 setItemSizeErr(true);
+    //                 setItemSizeErrMsg("You cannot have the same size more than once. Or leave the field empty.");
+    //                 isValid = false;
+    //             }
+
+    //             if (spices.length < 1 && currentStep === 2) {
+    //                 setItemSpiceErr(true);
+    //                 setItemSpiceErrMsg("Need to at least select one spice level.");
+    //                 isValid = false;
+    //             }
+
+    //             if ((itemName.length < 5 || itemName.length > 25) && currentStep === 2) {
+    //                 setItemNameErr(true);
+    //                 setItemNameErrMsg('Combo name must be between 5 and 25 characters.');
+    //                 isValid = false;
+    //             }
+
+    //             if ((itemDesc.length < 100 || itemDesc.length > 450) && currentStep === 2) {
+    //                 setItemDescErr(true);
+    //                 setItemDescErrMsg('Combo description must be between 100 and 450 characters.');
+    //                 isValid = false;
+    //             }
+
+    //             const isPriceValid = (price: any) => {
+    //                 const priceValue = parseFloat(price);
+    //                 return !isNaN(priceValue) && priceValue >= 1.00 && priceValue <= 999.99;
+    //             };
+
+    //             const prices = inputs.map(input => input.price);
+    //             const arePricesValid = prices.every(price => price && isPriceValid(price));
+
+    //             if (!arePricesValid && currentStep === 2) {
+    //                 setItemPriceErr(true);
+    //                 setItemPriceErrMsg("Prices cannot be empty, exceed 999.99, or be less than 1.00.");
+    //                 isValid = false;
+    //             }
+
+    //             if (productFilter[0].filter === "" && currentStep === 2) {
+    //                 setProductFilterErr(false);
+    //                 setProductFilterErrMsg("You must select one.");
+    //                 isValid = false;
+    //             }
+
+    //             if (!isValid || nameCheck) {
+    //                 isValid = false; // Ensure isValid is false if nameCheck is true
+    //             }
+
+    //             if (isValid && currentStep === 2 && !nameCheck) {
+    //                 try {
+    //                     const dataReturnValue = await addProductData(formData, newInputs, spices, productFilter);
+    //                     if (dataReturnValue === true) {
+    //                         setDataResponse(true);
+    //                     } else {
+    //                         setDataResponse(false);
+    //                     }
+    //                 } catch (error) {
+    //                     console.log(error);
+    //                 }
+    //                 try {
+    //                     const imgReturnValue = await addProductImg(formData);
+    //                     if (imgReturnValue === true) {
+    //                         setImgDataResponse(true);
+    //                     } else {
+    //                         setImgDataResponse(false);
+    //                     }
+    //                 } catch (error) {
+    //                     console.log(error);
+    //                 }
+    //             }
+    //         } catch (error) {
+    //             console.error('Error checking duplicate:', error);
+    //         }
+    //         setSubmitMsg("Finish")
+    //     },
+    //     [sizes, selectedFiles, currentStep, inputs, itemName, itemDesc, selectedSpice, nameCheck]
+    // );
+
+
+const submitForm = useCallback(
+    async (formData: FormData) => {
+        setSubmitMsg("Submitting...");
+        let isValid = true;
+
+        // Reset all error states before validation
+        setItemNameErr(false);
+        setItemDescErr(false);
+        setItemPriceErr(false);
+        setItemSpiceErr(false);
+        setItemSizeErr(false);
+        setProductFilterErr(false);
+
+        setItemNameErrMsg('');
+        setItemDescErrMsg('');
+        setItemPriceErrMsg('');
+        setItemSpiceErrMsg('');
+        setItemSizeErrMsg('');
+        setProductFilterErrMsg('');
+
+        // Append files to formData
+        selectedFiles.forEach((file, index) => {
+            formData.append(`file${index}`, file);
+        });
+
+        // Validate sizes
+        const validSizes = ["small", "medium", "large"];
+        const sizesArray = inputs.map(input => input.size).filter(size => size && size !== 'null');
+        const uniqueSizes = new Set(sizesArray);
+        const isSizeValid = sizesArray.every(size => validSizes.includes(size)) && uniqueSizes.size === sizesArray.length;
+        
+        if (!isSizeValid && currentStep === 2) {
+            setItemSizeErr(true);
+            setItemSizeErrMsg("Sizes must be unique and valid.");
+            isValid = false;
+        }
+
+        // Validate spices
+        if (selectedSpice.length < 1 && currentStep === 2) {
+            setItemSpiceErr(true);
+            setItemSpiceErrMsg("At least one spice level must be selected.");
+            isValid = false;
+        }
+
+        // Validate item name length
+        if ((itemName.length < 5 || itemName.length > 25) && currentStep === 2) {
+            setItemNameErr(true);
+            setItemNameErrMsg('Item name must be between 5 and 25 characters.');
+            isValid = false;
+        }
+
+        // Validate item description length
+        if ((itemDesc.length < 100 || itemDesc.length > 450) && currentStep === 2) {
+            setItemDescErr(true);
+            setItemDescErrMsg('Item description must be between 100 and 450 characters.');
+            isValid = false;
+        }
+
+        // Validate prices
+        const isPriceValid = (price: string) => {
+            const priceValue = parseFloat(price);
+            return !isNaN(priceValue) && priceValue >= 1.00 && priceValue <= 999.99;
+        };
+
+        const arePricesValid = inputs.every(input => input.price && isPriceValid(input.price));
+
+        if (!arePricesValid && currentStep === 2) {
+            setItemPriceErr(true);
+            setItemPriceErrMsg("Prices must be between 1.00 and 999.99.");
+            isValid = false;
+        }
+
+        // Validate product filter
+        if (productFilter[0].filter.length === 0 && currentStep === 2) {
+            setProductFilterErr(true);
+            setProductFilterErrMsg("You must select at least one product filter.");
+            isValid = false;
+        }
+
+        // Check for duplicate item names
+        try {
+            const duplicate = await duplicateProducts(itemName);
+            setNameCheck(duplicate);
+
+            if (duplicate && currentStep === 2) {
+                setItemNameErr(true);
+                setItemNameErrMsg("Duplicate product names are not allowed.");
+                isValid = false;
+            }
+        } catch (error) {
+            console.error('Error checking for duplicate:', error);
+            isValid = false;
+        }
+
+        // If validation fails, stop submission
+        if (!isValid || nameCheck) {
+            setSubmitMsg("Finish");
+            return;
+        }
+
+        // Submit form data and handle responses
+        if (isValid && currentStep === 2 && !nameCheck) {
             try {
-                const duplicate = await duplicateProducts(itemName);
-                setNameCheck(duplicate); // Update nameCheck state with duplicate result
+                const dataReturnValue = await addProductData(formData, inputs, selectedSpice, productFilter);
+                setDataResponse(true);
 
-                if (duplicate && currentStep === 2) {
-                    setItemNameErr(true);
-                    setItemNameErrMsg("Can't have two of the same product names.");
-                    isValid = false;
-                }
+                const imgReturnValue = await addProductImg(formData);
+                setImgDataResponse(true);
 
-                if (!validSizesFinal && currentStep === 2) {
-                    setItemSizeErr(true);
-                    setItemSizeErrMsg("You cannot have the same size more than once. Or leave the field empty.");
-                    isValid = false;
-                }
-
-                if (spices.length < 1 && currentStep === 2) {
-                    setItemSpiceErr(true);
-                    setItemSpiceErrMsg("Need to at least select one spice level.");
-                    isValid = false;
-                }
-
-                if ((itemName.length < 5 || itemName.length > 25) && currentStep === 2) {
-                    setItemNameErr(true);
-                    setItemNameErrMsg('Combo name must be between 5 and 25 characters.');
-                    isValid = false;
-                }
-
-                if ((itemDesc.length < 100 || itemDesc.length > 450) && currentStep === 2) {
-                    setItemDescErr(true);
-                    setItemDescErrMsg('Combo description must be between 100 and 450 characters.');
-                    isValid = false;
-                }
-
-                const isPriceValid = (price: any) => {
-                    const priceValue = parseFloat(price);
-                    return !isNaN(priceValue) && priceValue >= 1.00 && priceValue <= 999.99;
-                };
-
-                const prices = inputs.map(input => input.price);
-                const arePricesValid = prices.every(price => price && isPriceValid(price));
-
-                if (!arePricesValid && currentStep === 2) {
-                    setItemPriceErr(true);
-                    setItemPriceErrMsg("Prices cannot be empty, exceed 999.99, or be less than 1.00.");
-                    isValid = false;
-                }
-
-                if (productFilter[0].filter === "" && currentStep === 2) {
-                    setProductFilterErr(false);
-                    setProductFilterErrMsg("You must select one.");
-                    isValid = false;
-                }
-
-                if (!isValid || nameCheck) {
-                    isValid = false; // Ensure isValid is false if nameCheck is true
-                }
-
-                if (isValid && currentStep === 2 && !nameCheck) {
-                    try {
-                        const dataReturnValue = await addProductData(formData, newInputs, spices, productFilter);
-                        if (dataReturnValue === true) {
-                            setDataResponse(true);
-                        } else {
-                            setDataResponse(false);
-                        }
-                    } catch (error) {
-                        console.log(error);
-                    }
-                    try {
-                        const imgReturnValue = await addProductImg(formData);
-                        if (imgReturnValue === true) {
-                            setImgDataResponse(true);
-                        } else {
-                            setImgDataResponse(false);
-                        }
-                    } catch (error) {
-                        console.log(error);
-                    }
+                if (dataReturnValue && imgReturnValue) {
+                    setDone(true);
+                    setSubmitMsg("Successfully submitted!");
+                } else {
+                    setSubmitMsg("Submission failed. Please try again.");
                 }
             } catch (error) {
-                console.error('Error checking duplicate:', error);
+                console.error('Error during form submission:', error);
+                setSubmitMsg("An error occurred. Please try again.");
             }
-            setSubmitMsg("Finish")
-        },
-        [sizes, selectedFiles, currentStep, inputs, itemName, itemDesc, selectedSpice, nameCheck]
-    );
+        }
+    },
+    [currentStep, selectedFiles, inputs, itemName, itemDesc, selectedSpice, productFilter, nameCheck]
+);
 
 
 
@@ -416,7 +543,7 @@ const TestDouble = () => {
                         className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50"
                         onClick={closeModal}
                     >
-                        <div className="bg-white p-4 rounded-lg shadow-lg h-auto w-3/4 lg:w-1/2 xl:w-2/5">
+<div className="overflow-auto bg-white p-4 rounded-lg shadow-lg h-auto w-3/4 lg:w-1/2 xl:w-2/5 overflow-y-scroll max-h-[35rem]">
 
                             <div className="flex items-center justify-center p-4 pb-7">
                                 <ol className="items-center space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse">
@@ -521,7 +648,7 @@ const TestDouble = () => {
                         className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50"
                         onClick={closeModal}
                     >
-                        <div className="bg-white p-4 rounded-lg shadow-lg h-auto w-3/4 lg:w-1/2 xl:w-2/5 overflow-y-scroll max-h-[40rem] sm:max-h-full sm:overflow-hidden">
+<div className="overflow-auto bg-white p-4 rounded-lg shadow-lg h-auto w-3/4 lg:w-1/2 xl:w-2/5 overflow-y-scroll max-h-[35rem]">
 
                             <div className='w-full'>
                                 <div className="flex items-center justify-center p-2 pb-7">
