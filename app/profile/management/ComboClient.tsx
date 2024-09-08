@@ -376,7 +376,7 @@ const ComboClient: React.FC = () => {
                             className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50"
                             onClick={closeModal}
                         >
-                            <div className="bg-white p-4 rounded-lg shadow-lg h-auto w-3/4 lg:w-1/2 xl:w-2/5">
+<div className="overflow-auto bg-white p-4 rounded-lg shadow-lg h-auto w-3/4 lg:w-1/2 xl:w-2/5 overflow-y-scroll max-h-[35rem]">
                                 {/* {currentStep === 1 && ( */}
 
                                 <div className="flex items-center justify-center p-4 pb-7">
@@ -484,7 +484,7 @@ const ComboClient: React.FC = () => {
                             className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50"
                             onClick={closeModal}
                         >
-                            <div className="bg-white p-4 rounded-lg shadow-lg h-auto w-3/4 lg:w-1/2 xl:w-2/5">
+<div className="overflow-auto bg-white p-4 rounded-lg shadow-lg h-auto w-3/4 lg:w-1/2 xl:w-2/5 overflow-y-scroll max-h-[35rem]">
                                 <div className='w-full'>
                                     <div className="flex items-center justify-center p-4 pb-7">
 
