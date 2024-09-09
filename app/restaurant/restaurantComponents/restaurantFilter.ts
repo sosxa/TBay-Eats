@@ -147,7 +147,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
             // Iterate over each product to fetch associated images
             for (const product of products) {
                 const priceInRange = !priceFilter || (product.price_size[0].price >= priceFilter[0] && product.price_size[0].price <= priceFilter[1]);
-                
+
                 if (userId && priceInRange) {
                     // Construct the path to query images
                     const imagePath = `${userId}/${product.ogName}/`;
@@ -161,19 +161,22 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                     if (imageError) {
                         throw Error('Error fetching image data: ' + imageError.message);
                     }
+                    console.log("images");
+                    console.log(images[0].name);
+                    if (images.length > 0 && images[0]) {
+                        const { data: publicUrlData } = await supabase
+                            .storage
+                            .from('product_img')
+                            .getPublicUrl(`${userId}/${product.ogName}/${images[0].name}`);
 
-                    const { data: publicUrlData } = await supabase
-                        .storage
-                        .from('product_img')
-                        .getPublicUrl(`${userId}/${product.ogName}/${images[0].name}`);
 
-
-                    const finalUrl = publicUrlData.publicUrl;
-                    // Combine product data with the first image
-                    productsWithImages.push({
-                        ...product,
-                        finalUrl
-                    });
+                        const finalUrl = publicUrlData.publicUrl;
+                        // Combine product data with the first image
+                        productsWithImages.push({
+                            ...product,
+                            finalUrl
+                        });
+                    }
                 }
             }
 
@@ -201,7 +204,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
 
                 const priceInRange = !priceFilter || (product.price_size[0].price >= priceFilter[0] && product.price_size[0].price <= priceFilter[1]);
 
-          
+
                 if (!filter || originMatches && priceInRange) {
                     // Default image URL or handle case where user data might not be available
                     let finalUrl = '';
@@ -221,7 +224,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                         }
 
 
-                        if (images.length > 0) {
+                        if (images.length > 0 && images[0].name) {
                             const { data: publicUrlData } = await supabase
                                 .storage
                                 .from('product_img')
