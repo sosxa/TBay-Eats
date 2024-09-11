@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import restaurantFilter from "./restaurantFilter.ts"
+import restaurantFilter from "./restaurantFilter"
 
 // Define the type for the props
 interface FoodDivProps {
