@@ -159,11 +159,12 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
 
         if (modifiedFilter === "All") {
 
-            // Fetch active products
+            // Fetch active products with a limit of 16
             const { data: products, error: productError } = await supabase
                 .from('product_info')
                 .select('*')
-                .eq('active', true);
+                .eq('active', true)
+                .limit(16);  // Add limit to fetch only 16 products
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
