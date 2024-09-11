@@ -13,7 +13,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(16);
+                .limit(9);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -67,7 +67,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(16);
+                .limit(9);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -136,7 +136,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(16);
+                .limit(9);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -191,7 +191,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(16);
+                .limit(9);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
