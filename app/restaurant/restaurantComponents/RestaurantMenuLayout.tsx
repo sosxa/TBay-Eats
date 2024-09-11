@@ -1,11 +1,9 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import restaurantFilter from './restaurantFilter';
-
+import restaurantFilter from "./restaurantFilter.ts"
 
 // Define the type for the props
 interface FoodDivProps {
@@ -25,33 +23,6 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
     const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             setLoading(true);
-    //             const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type);
-    //             setProducts(data);
-    //             setLoading(false);
-    //         } catch (error) {
-    //             console.error('Error fetching products:', error);
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     // Fetch data on component mount if rdyToFetch is true
-    //     if (rdyToFetch && (filter !== prevFilter || prices.min !== prevPrices.min || prices.max !== prevPrices.max || type !== prevType)) {
-    //         fetchData();
-    //         setPrevFilter(filter);
-    //         setPrevPrices(prices);
-    //         setPrevType(type);
-    //     }
-
-    //     // Additional fetch if products is empty and should be fetched
-    //     if (rdyToFetch && (!products || products.length === 0)) {
-    //         fetchData();
-    //     }
-
-    // }, [filter, prices, type, rdyToFetch, prevFilter, prevPrices, prevType]);
     useEffect(() => {
         const fetchData = async () => {
             try {

@@ -12,7 +12,8 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .from('combo_info')
                 .select('*')
                 .eq("email", restaurantEmail)
-                .eq('active', true);
+                .eq('active', true)
+                .limit(16);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -65,7 +66,8 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .from('combo_info')
                 .select('*')
                 .eq("email", restaurantEmail)
-                .eq('active', true);
+                .eq('active', true)
+                .limit(16);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -133,7 +135,8 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .from('product_info')
                 .select('*')
                 .eq("email", restaurantEmail)
-                .eq('active', true);
+                .eq('active', true)
+                .limit(16);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -187,7 +190,8 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .from('product_info')
                 .select('*')
                 .eq("email", restaurantEmail)
-                .eq('active', true);
+                .eq('active', true)
+                .limit(16);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
