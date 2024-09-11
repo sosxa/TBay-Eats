@@ -82,7 +82,7 @@ const DualRangeSliderDemo: React.FC<DualRangeSliderDemoProps> = ({
     }, [isDragging]);
 
     return (
-        <div className="max-w-full mx-auto px-5 py-8 lg:w-1/2 lg:mt-52 xl:mt-0 xl:w-auto">
+        <div className="max-w-full mx-auto px-5 py-8 lg:w-1/2 xl:mt-0 xl:w-auto">
             <div className="bg-gray-200 shadow-md rounded-lg max-w-full p-6">
                 <h2 className="text-2xl font-semibold mb-10 text-gray-800">Select Price Range</h2>
 
