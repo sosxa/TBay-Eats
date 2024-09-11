@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import FoodDiv from "@/app/components/food/foodMenuLayout";
 import CategorySelector from "@/app/menuLogic/CategorySelector";
-import DualRangeSliderDemo from "@/app/menuLogic/DualRangeSlider";
-
+import DualRangeSliderDemo from "@/app/menuLogic/DualRangeSlider"; 
+ 
 
 const ClientSideWrapper: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<any>('All');

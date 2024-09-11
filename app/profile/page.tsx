@@ -1,14 +1,24 @@
+'use server';
 import React, { Suspense, lazy } from 'react';
 import Header from '../components/header/Header';
 import FooterLayout from '../components/footerLayouts/FooterLayout';
 import DecideClient from '../components/sectionComponent/DecideClient';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation'
 
 // Dynamically import components if they are large or async
 const PersonalFormClient = lazy(() => import('../components/profileComponents/PersonalFormClient'));
 const ImageUploader = lazy(() => import('../components/profileImgComponent/profileClient'));
 const DecideAside = lazy(() => import('./aside/DecideAside'));
 
-const Page = () => {
+const Page = async () => {
+
+    const supabase = createClient();
+    const { data: { session } } = await supabase.auth.getSession()
+
+    if (!session) {
+        redirect("/login")
+    }
     return (
         <>
             <div className='mb-20'>
