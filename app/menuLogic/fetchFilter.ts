@@ -21,7 +21,8 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
             const { data: products, error: productError } = await supabase
                 .from('combo_info')
                 .select('*')
-                .eq('active', true);
+                .eq('active', true)
+                .limit(9);  // Add limit to fetch only 16 products
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -83,7 +84,8 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
             const { data: products, error: productError } = await supabase
                 .from('combo_info')
                 .select('*')
-                .eq('active', true);
+                .eq('active', true)
+                .limit(9);  // Add limit to fetch only 16 products
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -164,7 +166,7 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                 .from('product_info')
                 .select('*')
                 .eq('active', true)
-                .limit(16);  // Add limit to fetch only 16 products
+                .limit(9);  // Add limit to fetch only 16 products
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -236,7 +238,8 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
             const { data: products, error: productError } = await supabase
                 .from('product_info')
                 .select('*')
-                .eq('active', true);
+                .eq('active', true)
+                .limit(9);  // Add limit to fetch only 16 products
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
