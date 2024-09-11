@@ -95,6 +95,9 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
     setSelectedProduct(null);
   };
 
+  console.log("products");
+  console.log(products);
+
   return (
     <>
       {loading ? (
