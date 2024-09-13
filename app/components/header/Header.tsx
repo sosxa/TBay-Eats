@@ -14,7 +14,7 @@ const Header = () => {
         //     <div className='justify-center'>
         <>
             <NavbarLaptop className='hidden lg:inline lg:mt-10' onCartClick={toggleSidebar} />
-            <NavbarMobile className='lg:hidden' />
+            <NavbarMobile className='lg:hidden' onCartClick={toggleSidebar} />
         </>
         //  </div>
         // </div>
