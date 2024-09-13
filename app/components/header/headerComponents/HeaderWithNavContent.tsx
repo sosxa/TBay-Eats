@@ -31,7 +31,7 @@ const HeaderWithNavContent = () => {
     <div className='w-auto h-max z-auto bg-custom-green mb-[5rem]'>
       <div className='h-full justify-center'>
         <NavbarLaptop className='hidden lg:inline' onCartClick={toggleSidebar} />
-        <NavbarMobile className='lg:hidden' />
+        <NavbarMobile className='lg:hidden' onCartClick={toggleSidebar} />
         <div className='flex py-14 w-[70%] mx-auto items-center text-center sm:text-left translate-x-[25%] gap-24 lg:mx-0'>
           <FormHeader
             textClass='text-white w-[100%] -translate-x-[22.5%] sm:translate-x-0 sm:w-[60%] sm:text-center lg:w-1/2 lg:text-left'

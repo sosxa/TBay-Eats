@@ -6,9 +6,10 @@ import GetUser from './GetUser';
 
 interface NavbarMobileProps {
     className?: string;
+    onCartClick: () => void;
 }
 
-const NavbarMobile: React.FC<NavbarMobileProps> = ({ className }) => {
+const NavbarMobile: React.FC<NavbarMobileProps> = ({ className, onCartClick }) => {
     const [dropDown, setDropDown] = useState(false);
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
