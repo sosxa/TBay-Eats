@@ -41,11 +41,10 @@ const NavbarMobile: React.FC<NavbarMobileProps> = ({ className }) => {
                             <a href='/'>TBayEAT</a>
                         </h4>
                         <Image
-                            alt=''
+                            alt='Hamburger Icon'
                             src={hamburger}
                             width={35}
                             height={35}
-                            className={dropDown ? 'rotate-90 transition-transform duration-500 ease-in' : 'rotate-180 transition-transform duration-500 ease-in'}
                             onClick={handleBurger}
                         />
                     </div>
@@ -74,6 +73,9 @@ const NavbarMobile: React.FC<NavbarMobileProps> = ({ className }) => {
                                 </li>
                                 <li className={`w-full ${!user ? 'block' : 'hidden'}`}>
                                     <a href='/login' className='block text-center hover:bg-gray-200 rounded'>Sign In</a>
+                                </li>
+                                <li>
+                                    <button className='' onClick={onCartClick}>Cart</button>
                                 </li>
                             </ul>
                             <div className="flex justify-center mt-4">
