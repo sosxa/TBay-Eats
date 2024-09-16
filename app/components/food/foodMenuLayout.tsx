@@ -29,10 +29,10 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
       try {
         setLoading(true);
         const data = await fetchFilter(filter, [prices.min, prices.max], type, page, itemsPerPage);
-        setProducts(data ? data : []);
         if (data.length < itemsPerPage) {
           setHasMore(false); // No more products to load
         }
+        setProducts(data ? data : []);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
