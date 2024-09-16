@@ -32,7 +32,7 @@ interface Product {
 }
 
 const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]); // Ensure it's always an array
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [asideOpen, setAsideOpen] = useState<boolean>(false);
@@ -52,8 +52,8 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
           setHasMore(false); // No more products to load
         }
 
-        // Use an empty array as the default value if prevProducts is undefined
-        setProducts(prevProducts => [...(prevProducts || []), ...data]);
+        // Ensure prevProducts is treated as an array
+        setProducts(prevProducts => [...prevProducts, ...data]);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
@@ -184,8 +184,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
                 <h4 className='text-xl font-semibold'>
                   {!loading && type === "products"
                     ? `$${product.active_discount ? product.discount_price_size?.[0]?.price : product.price_size?.[0]?.price}`
-                    : `$${product.active_discount ? product.active_discount_price : product.price}`
-                  }
+                    : `$${product.active_discount ? product.active_discount_price : product.price}`}
                 </h4>
               </div>
               <div className='w-full px-[.5rem] flex gap-4 pb-[1rem]'>
