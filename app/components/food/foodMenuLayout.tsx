@@ -24,7 +24,6 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
   const { dispatch } = useCart();
   const itemsPerPage = 9; // Number of items to fetch per page
 
-
   const fetchData = useCallback(async () => {
     if (rdyToFetch) {
       try {
@@ -33,7 +32,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
         if (data && data.length < itemsPerPage) {
           setHasMore(false); // No more products to load
         }
-        setProducts(data ? data : []);
+        setProducts(prevProducts => [...prevProducts, ...data]);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
@@ -45,7 +44,6 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
 
   const handleLoadMore = () => {
     if (hasMore) {
@@ -108,7 +106,6 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
     setAsideOpen(false);
     setSelectedProduct(null);
   };
-
 
   return (
     <>
