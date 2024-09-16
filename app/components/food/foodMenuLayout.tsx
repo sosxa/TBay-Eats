@@ -13,10 +13,28 @@ interface FoodDivProps {
   rdyToFetch: boolean;
 }
 
+interface Product {
+  id: string;
+  finalUrl: string;
+  product_name?: string;
+  combo_name?: string;
+  price: number;
+  discount_price_size?: { price: number }[];
+  active_discount?: boolean;
+  discount_amount?: number;
+  combo_items?: any[];
+  spice_level?: { label: string }[];
+  price_size?: { size: string; price: number }[];
+  rating_messages?: { rating: number }[];
+  email?: string;
+  ogName?: string;
+  origin?: { filter: string }[];
+}
+
 const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) => {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [asideOpen, setAsideOpen] = useState<boolean>(false);
   const router = useRouter();
   const [page, setPage] = useState<number>(1); // Track the current page
@@ -29,10 +47,13 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
       try {
         setLoading(true);
         const data = await fetchFilter(filter, [prices.min, prices.max], type, page, itemsPerPage);
+
         if (data && data.length < itemsPerPage) {
           setHasMore(false); // No more products to load
         }
-        setProducts(prevProducts => [...prevProducts, ...data]);
+
+        // Use an empty array as the default value if prevProducts is undefined
+        setProducts(prevProducts => [...(prevProducts || []), ...data]);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
@@ -56,7 +77,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
     router.push(`/${route}/${productId}`);
   };
 
-  const handleAddToCartClick = (event: React.MouseEvent<HTMLButtonElement>, product: any) => {
+  const handleAddToCartClick = (event: React.MouseEvent<HTMLButtonElement>, product: Product) => {
     event.stopPropagation();
 
     const isCombo = !!product.combo_name;
@@ -74,12 +95,11 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
       firstImgUrl: product.finalUrl,
       itemOgName: product.ogName,
       creatorEmail: product.email,
-      filter: product.origin[0]?.filter,
+      filter: product.origin?.[0]?.filter,
       price: isCombo ? product.price : (product.price_size?.[0]?.price || product.price),
       quantity: 1,
       ogPrice: isCombo ? product.price : (product.price_size?.[0]?.price || product.price),
       activeDiscount: product.active_discount,
-
       discountPrice: !isCombo && product.discount_price_size?.[0]?.price ? product.discount_price_size?.[0]?.price : product.active_discount_price,
       discountAmount: product.discount_amount,
       comboItems: isCombo ? product.combo_items : undefined,
