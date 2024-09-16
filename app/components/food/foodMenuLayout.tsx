@@ -19,25 +19,38 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [asideOpen, setAsideOpen] = useState<boolean>(false);
   const router = useRouter();
+  const [page, setPage] = useState<number>(1); // Track the current page
   const { dispatch } = useCart();
+  const itemsPerPage = 9; // Number of items to fetch per page
+
 
   const fetchData = useCallback(async () => {
     if (rdyToFetch) {
       try {
         setLoading(true);
-        const data = await fetchFilter(filter, [prices.min, prices.max], type);
+        const data = await fetchFilter(filter, [prices.min, prices.max], type, page, itemsPerPage);
         setProducts(data ? data : []);
+        if (data.length < itemsPerPage) {
+          setHasMore(false); // No more products to load
+        }
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
         setLoading(false);
       }
     }
-  }, [filter, prices.min, prices.max, type, rdyToFetch]);
+  }, [filter, prices.min, prices.max, type, rdyToFetch, page]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+
+  const handleLoadMore = () => {
+    if (hasMore) {
+      setPage(prevPage => prevPage + 1);
+    }
+  };
 
   const handleChange = (productId: string) => {
     const route = type === 'combos' ? 'combo' : 'product';
@@ -100,7 +113,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
     <>
       {loading ? (
         <div className='w-full flex flex-wrap gap-2 md:gap-4 lg:gap-6 md:grid md:grid-cols-2 lg:grid-cols-3'>
-          {Array.from({ length: 6 }).map((_, index) => (
+          {Array.from({ length: itemsPerPage }).map((_, index) => (
             <div
               key={index}
               className='w-full rounded-xl shadow-lg p-4 flex flex-col'

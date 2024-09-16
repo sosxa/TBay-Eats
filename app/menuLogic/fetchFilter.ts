@@ -1,7 +1,7 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
 
-const fetchFilter = async (filter: string | undefined, priceFilter: any[], type: string) => {
+const fetchFilter = async (filter: string | undefined, priceFilter: any[], type: string, page: number, limit: number) => {
     const supabase = createClient();
 
     // Replace "+" with a space and capitalize the first letter of each word
@@ -14,6 +14,7 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
     };
 
     const modifiedFilter = filter ? capitalizeWords(filter) : '';
+    const offset = (page - 1) * limit;
 
     if (type === "combos") {
         if (modifiedFilter === "All") {
@@ -22,7 +23,8 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                 .from('combo_info')
                 .select('*')
                 .eq('active', true)
-                 .limit(9);  // Add limit to fetch only 16 products
+                //  .limit(9);  // Add limit to fetch only 16 products
+                .range(offset, offset + limit - 1);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -85,7 +87,8 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                 .from('combo_info')
                 .select('*')
                 .eq('active', true)
-                .limit(9);  // Add limit to fetch only 16 products
+                // .limit(9);  // Add limit to fetch only 16 products
+                .range(offset, offset + limit - 1);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -166,7 +169,8 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                 .from('product_info')
                 .select('*')
                 .eq('active', true)
-                 .limit(9);  // Add limit to fetch only 16 products
+                // .limit(9);  // Add limit to fetch only 16 products
+                .range(offset, offset + limit - 1);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -239,7 +243,8 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                 .from('product_info')
                 .select('*')
                 .eq('active', true)
-                .limit(9);  // Add limit to fetch only 16 products
+                // .limit(9);  // Add limit to fetch only 16 products
+                .range(offset, offset + limit - 1);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
