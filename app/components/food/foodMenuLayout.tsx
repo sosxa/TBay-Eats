@@ -13,28 +13,10 @@ interface FoodDivProps {
   rdyToFetch: boolean;
 }
 
-interface Product {
-  id: string;
-  finalUrl: string;
-  product_name?: string;
-  combo_name?: string;
-  price: number;
-  discount_price_size?: { price: number }[];
-  active_discount?: boolean;
-  discount_amount?: number;
-  combo_items?: any[];
-  spice_level?: { label: string }[];
-  price_size?: { size: string; price: number }[];
-  rating_messages?: { rating: number }[];
-  email?: string;
-  ogName?: string;
-  origin?: { filter: string }[];
-}
-
 const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) => {
-  const [products, setProducts] = useState<Product[]>([]); // Ensure it's always an array
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [asideOpen, setAsideOpen] = useState<boolean>(false);
   const router = useRouter();
   const [page, setPage] = useState<number>(1); // Track the current page
@@ -42,18 +24,16 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
   const { dispatch } = useCart();
   const itemsPerPage = 9; // Number of items to fetch per page
 
+
   const fetchData = useCallback(async () => {
     if (rdyToFetch) {
       try {
         setLoading(true);
         const data = await fetchFilter(filter, [prices.min, prices.max], type, page, itemsPerPage);
-
         if (data && data.length < itemsPerPage) {
           setHasMore(false); // No more products to load
         }
-
-        // Ensure prevProducts is treated as an array
-        setProducts(prevProducts => [...prevProducts, ...data]);
+        setProducts(prevProducts => [...prevProducts, ...data]); // Append new products to existing ones
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
@@ -61,23 +41,26 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
       }
     }
   }, [filter, prices.min, prices.max, type, rdyToFetch, page]);
-
+  
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+  
+
 
   const handleLoadMore = () => {
     if (hasMore) {
       setPage(prevPage => prevPage + 1);
     }
   };
+  
 
   const handleChange = (productId: string) => {
     const route = type === 'combos' ? 'combo' : 'product';
     router.push(`/${route}/${productId}`);
   };
 
-  const handleAddToCartClick = (event: React.MouseEvent<HTMLButtonElement>, product: Product) => {
+  const handleAddToCartClick = (event: React.MouseEvent<HTMLButtonElement>, product: any) => {
     event.stopPropagation();
 
     const isCombo = !!product.combo_name;
@@ -95,11 +78,12 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
       firstImgUrl: product.finalUrl,
       itemOgName: product.ogName,
       creatorEmail: product.email,
-      filter: product.origin?.[0]?.filter,
+      filter: product.origin[0]?.filter,
       price: isCombo ? product.price : (product.price_size?.[0]?.price || product.price),
       quantity: 1,
       ogPrice: isCombo ? product.price : (product.price_size?.[0]?.price || product.price),
       activeDiscount: product.active_discount,
+
       discountPrice: !isCombo && product.discount_price_size?.[0]?.price ? product.discount_price_size?.[0]?.price : product.active_discount_price,
       discountAmount: product.discount_amount,
       comboItems: isCombo ? product.combo_items : undefined,
@@ -126,6 +110,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
     setAsideOpen(false);
     setSelectedProduct(null);
   };
+
 
   return (
     <>
@@ -184,7 +169,8 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
                 <h4 className='text-xl font-semibold'>
                   {!loading && type === "products"
                     ? `$${product.active_discount ? product.discount_price_size?.[0]?.price : product.price_size?.[0]?.price}`
-                    : `$${product.active_discount ? product.active_discount_price : product.price}`}
+                    : `$${product.active_discount ? product.active_discount_price : product.price}`
+                  }
                 </h4>
               </div>
               <div className='w-full px-[.5rem] flex gap-4 pb-[1rem]'>
