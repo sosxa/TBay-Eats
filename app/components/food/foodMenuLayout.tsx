@@ -20,6 +20,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
   const [asideOpen, setAsideOpen] = useState<boolean>(false);
   const router = useRouter();
   const [page, setPage] = useState<number>(1); // Track the current page
+  const [hasMore, setHasMore] = useState(true);
   const { dispatch } = useCart();
   const itemsPerPage = 9; // Number of items to fetch per page
 
