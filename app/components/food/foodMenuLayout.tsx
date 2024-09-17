@@ -29,7 +29,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
         setLoading(true);
         const data = await fetchFilter(filter, [prices.min, prices.max], type, page, 9); // 9 products per page
         
-        if (data.length === 0) {
+        if (data && data.length === 0) {
           setHasMore(false); // No more products to load
         } else {
           setProducts(prevProducts => [...(prevProducts || []), ...(data || [])]); // Ensure data is treated as an array
