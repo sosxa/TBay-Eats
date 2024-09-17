@@ -6,6 +6,24 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import fetchFilter from '@/app/menuLogic/fetchFilter';
 import SlidingAside from './SlidingAside';
 
+interface Product {
+  id: string;
+  combo_name?: string;
+  product_name?: string;
+  finalUrl: string;
+  ogName: string;
+  email: string;
+  origin: { filter?: string }[];
+  price: number;
+  price_size?: { price: number; size?: string }[];
+  active_discount?: boolean;
+  discount_price_size?: { price: number }[];
+  discount_amount?: number;
+  combo_items?: any[];
+  spice_level?: { label?: string }[];
+  rating_messages: { rating: number }[];
+}
+
 interface FoodDivProps {
   filter: string;
   prices: { min: number; max: number };
@@ -14,9 +32,9 @@ interface FoodDivProps {
 }
 
 const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) => {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [asideOpen, setAsideOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1); // Track current page
   const [hasMore, setHasMore] = useState<boolean>(true); // Check if there are more products to load
@@ -27,12 +45,12 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
     if (rdyToFetch) {
       try {
         setLoading(true);
-        const data = await fetchFilter(filter, [prices.min, prices.max], type, page, 9); // 9 products per page
+        const data: Product[] = await fetchFilter(filter, [prices.min, prices.max], type, page, 9); // 9 products per page
         
-        if (data && data.length === 0) {
+        if (data.length === 0) {
           setHasMore(false); // No more products to load
         } else {
-          setProducts(prevProducts => [...(prevProducts || []), ...(data || [])]); // Ensure data is treated as an array
+          setProducts(prevProducts => [...prevProducts, ...data]); // Ensure data is treated as an array
         }
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -59,7 +77,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
     router.push(`/${route}/${productId}`);
   };
 
-  const handleAddToCartClick = (event: React.MouseEvent<HTMLButtonElement>, product: any) => {
+  const handleAddToCartClick = (event: React.MouseEvent<HTMLButtonElement>, product: Product) => {
     event.stopPropagation();
 
     const isCombo = !!product.combo_name;
@@ -82,8 +100,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
       quantity: 1,
       ogPrice: isCombo ? product.price : (product.price_size?.[0]?.price || product.price),
       activeDiscount: product.active_discount,
-
-      discountPrice: !isCombo && product.discount_price_size?.[0]?.price ? product.discount_price_size?.[0]?.price : product.active_discount_price,
+      discountPrice: !isCombo && product.discount_price_size?.[0]?.price ? product.discount_price_size?.[0]?.price : product.discount_amount,
       discountAmount: product.discount_amount,
       comboItems: isCombo ? product.combo_items : undefined,
       spiceLevel: isProduct ? product.spice_level?.[0]?.label : undefined,
@@ -179,8 +196,8 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
                   </div>
                   <p className='text-base'>
                     {(() => {
-                      const ratings = product.rating_messages.map((item: any) => item.rating);
-                      const averageRating = ratings.reduce((acc: number, rating: number) => acc + rating, 0) / ratings.length;
+                      const ratings = product.rating_messages.map(item => item.rating);
+                      const averageRating = ratings.reduce((acc, rating) => acc + rating, 0) / ratings.length;
                       return averageRating.toFixed(1);
                     })()}
                   </p>
@@ -194,7 +211,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
               </div>
             ))}
           </div>
-          {/* {hasMore && !loading && (
+          {hasMore && !loading && (
             <div className='w-full text-center py-4'>
               <button
                 className='bg-custom-yellow text-white font-bold py-2 px-4 rounded-md hover:bg-yellow-600 transition-colors'
@@ -203,7 +220,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
                 Load More
               </button>
             </div>
-          )} */}
+          )}
         </>
       )}
 
