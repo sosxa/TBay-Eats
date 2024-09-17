@@ -33,7 +33,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
         if (data && data.length < itemsPerPage) {
           setHasMore(false); // No more products to load
         }
-        setProducts(prevProducts => [...prevProducts, ...data]); // Append new products to existing ones
+        setProducts(prevProducts => [...(prevProducts || []), ...data]);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
