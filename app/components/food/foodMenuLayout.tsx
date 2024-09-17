@@ -29,10 +29,10 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
         setLoading(true);
         const data = await fetchFilter(filter, [prices.min, prices.max], type, page, 9); // 9 products per page
         
-        if (data && data.length === 0) {
+        if (data.length === 0) {
           setHasMore(false); // No more products to load
         } else {
-          setProducts(prevProducts => [...prevProducts, ...data]);
+          setProducts(prevProducts => [...(prevProducts || []), ...(data || [])]); // Ensure data is treated as an array
         }
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -174,27 +174,23 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
                 <div className='w-full px-[.5rem] flex gap-4 pb-[1rem]'>
                   <div className='bg-gray-300 rounded-md w-[3.5rem] flex items-center justify-center px-5'>
                     <div className='w-6 h-6 flex items-center justify-center'>
-                      <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 117.19" className="w-4 h-4">
-                        <path d="M64.39,2,80.11,38.76,120,42.33a3.2,3.2,0,0,1,1.83,5.59h0L91.64,74.25l8.92,39a3.2,3.2,0,0,1-4.87,3.4L61.44,96.19,27.09,116.73a3.2,3.2,0,0,1-4.76-3.46h0l8.92-39L1.09,47.92A3.2,3.2,0,0,1,3,42.32l39.74-3.56L58.49,2a3.2,3.2,0,0,1,5.9,0Z" />
-                      </svg>
+                      <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,12,0ZM10,17V13H14v4Zm0-6V7h4v4Z"/></svg>
                     </div>
-                    <p className='tracking-wide text-md font-medium ml-1'>
-                      {!loading && product.rating_messages && product.rating_messages.length > 0 && (
-                        (() => {
-                          const ratings = product.rating_messages.map((item: any) => item.rating);
-                          const averageRating = ratings.reduce((acc: number, rating: number) => acc + rating, 0) / ratings.length;
-                          return averageRating.toFixed(1);
-                        })()
-                      )}
-                    </p>
                   </div>
-                  <button
-                    onClick={(event) => handleAddToCartClick(event, product)}
-                    className='bg-custom-yellow text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors'
-                  >
-                    Add to Cart
-                  </button>
+                  <p className='text-base'>
+                    {(() => {
+                      const ratings = product.rating_messages.map((item: any) => item.rating);
+                      const averageRating = ratings.reduce((acc: number, rating: number) => acc + rating, 0) / ratings.length;
+                      return averageRating.toFixed(1);
+                    })()}
+                  </p>
                 </div>
+                <button
+                  onClick={(event) => handleAddToCartClick(event, product)}
+                  className='bg-custom-yellow text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors'
+                >
+                  Add to Cart
+                </button>
               </div>
             ))}
           </div>
