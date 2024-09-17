@@ -194,7 +194,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
               </div>
             ))}
           </div>
-          {hasMore && !loading && (
+          {/* {hasMore && !loading && (
             <div className='w-full text-center py-4'>
               <button
                 className='bg-custom-yellow text-white font-bold py-2 px-4 rounded-md hover:bg-yellow-600 transition-colors'
@@ -203,7 +203,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
                 Load More
               </button>
             </div>
-          )}
+          )} */}
         </>
       )}
 
