@@ -26,11 +26,11 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
 
     const fetchData = useCallback(async () => {
         if (!rdyToFetch || !restaurantEmail || !userId) return;
-    
+
         setLoading(true);
         try {
             const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, page, itemsPerPage);
-    
+
             if (data) {
                 setProducts(prevProducts => {
                     // Only update if new data is returned
@@ -44,7 +44,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
             setLoading(false);
         }
     }, [rdyToFetch, restaurantEmail, userId, filter, prices, type, page, itemsPerPage]);
-    
+
     useEffect(() => {
         // Check if any of the dependencies have changed
         if (filter !== prevFilter || prices.min !== prevPrices.min || prices.max !== prevPrices.max || type !== prevType) {
@@ -54,21 +54,13 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
             setPrevType(type);
             // Reset to the first page and fetch data
             setPage(1);
-            fetchData(); // Fetch data with new filters
         }
-    }, [filter, prices, type, fetchData]);
-    
-    useEffect(() => {
-        // Fetch data initially or when page changes
-        if (page === 1 || products.length === 0) {
-            fetchData();
-        }
-    }, [page, fetchData]);
-    
+    }, [filter, prices, type]);
 
     useEffect(() => {
+        // Fetch data when the page changes or when filters are reset
         fetchData();
-    }, [fetchData]);
+    }, [fetchData, page]);
 
     const handleChange = (productId: any) => {
         router.push('/product/' + productId);
