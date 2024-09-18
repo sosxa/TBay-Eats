@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import restaurantFilter from './restaurantFilter';
+import restaurantFilter from "./restaurantFilter";
 
 interface FoodDivProps {
     filter: string;
@@ -15,31 +15,48 @@ interface FoodDivProps {
 
 const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch, restaurantEmail, userId }) => {
     const [products, setProducts] = useState<any[]>([]);
+    const [prevFilter, setPrevFilter] = useState<string>(filter);
+    const [prevPrices, setPrevPrices] = useState<{ min: number; max: number }>(prices);
+    const [prevType, setPrevType] = useState<'combos' | 'products'>(type);
     const [loading, setLoading] = useState<boolean>(false);
-    const [page, setPage] = useState<number>(1);
-    const [hasMore, setHasMore] = useState(true);
+    const [page, setPage] = useState<number>(1); // Track the current page
     const router = useRouter();
     const itemsPerPage = 9;
+    const [hasMore, setHasMore] = useState(true);
 
     const fetchData = useCallback(async () => {
         if (!rdyToFetch) return;
 
         setLoading(true);
         try {
-            const newProducts = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, page, itemsPerPage);
+            const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, page, itemsPerPage);
 
-            setProducts((prevProducts) => {
-                // Only update if new data is returned
-                if (page === 1) return newProducts; // Reset for new page
-                return [...prevProducts, ...newProducts]; // Append for next pages
-            });
-            setHasMore(newProducts.length === itemsPerPage);
+            if (data) {
+                setProducts(prevProducts => {
+                    // Only update if new data is returned
+                    return page === 1 ? data : [...prevProducts, ...data];
+                });
+                setHasMore(data.length === itemsPerPage);
+            }
         } catch (error) {
             console.error('Error fetching products:', error);
         } finally {
             setLoading(false);
         }
-    }, [filter, prices, type, rdyToFetch, restaurantEmail, userId, page]);
+
+        // Check if filter or prices or type has changed
+        if (rdyToFetch && (filter !== prevFilter || prices.min !== prevPrices.min || prices.max !== prevPrices.max || type !== prevType)) {
+            fetchData();
+            setPrevFilter(filter);
+            setPrevPrices(prices);
+            setPrevType(type);
+        }
+
+        // Fetch if products is empty and should be fetched
+        if (rdyToFetch && products.length === 0) {
+            fetchData();
+        }
+    }, [filter, prices, type, rdyToFetch, restaurantEmail, userId, page, prevFilter, prevPrices, prevType]);
 
     useEffect(() => {
         fetchData();
@@ -51,7 +68,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
 
     const handleLoadMore = () => {
         if (hasMore) {
-            setPage((prevPage) => prevPage + 1);
+            setPage(prevPage => prevPage + 1);
         }
     };
 
@@ -60,7 +77,10 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
             {loading ? (
                 <div className='w-full flex flex-wrap gap-2 md:gap-4 lg:gap-6 md:grid md:grid-cols-2 lg:grid-cols-3'>
                     {Array.from({ length: 6 }).map((_, index) => (
-                        <div key={index} className='w-full rounded-xl shadow-lg p-4 flex flex-col'>
+                        <div
+                            key={index}
+                            className='w-full rounded-xl shadow-lg p-4 flex flex-col'
+                        >
                             <Skeleton height={300} width='100%' className='rounded-t-xl' />
                             <div className='w-full flex flex-col gap-2 pt-4'>
                                 <Skeleton width='60%' height={30} />
@@ -145,4 +165,4 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
     );
 };
 
-export default React.memo(RestaurantMenuLayout); // Prevent unnecessary re-renders
+export default RestaurantMenuLayout;
