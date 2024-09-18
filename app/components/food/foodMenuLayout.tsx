@@ -217,7 +217,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
         <div className="text-center mt-4">
           <button
             onClick={handleLoadMore}
-            className="bg-custom-green hover:bg-custom-dark-green w-[80%] text-white px-4 py-2 rounded">
+            className="bg-custom-green hover:bg-custom-dark-green w-[50%] text-white px-4 py-2 rounded">
             Load More
           </button>
         </div>

@@ -21,20 +21,31 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
     const [prevPrices, setPrevPrices] = useState<{ min: number; max: number }>(prices);
     const [prevType, setPrevType] = useState<'combos' | 'products'>(type);
     const [loading, setLoading] = useState<boolean>(false);
+    // const [products, setProducts] = useState<Product[]>([]);
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [offset, setOffset] = useState<number>(0); // To track pagination offset
+    const limit = 9; // Number of items to fetch each time
+
     const router = useRouter();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type);
-                setProducts(data);
+                const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, offset, limit);
+
+                if (data.length < limit) {
+                    setHasMore(false); // No more items to load
+                }
+
+                setProducts((prevProducts) => [...prevProducts, ...data]);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching products:', error);
                 setLoading(false);
             }
         };
+
 
         // Fetch data on component mount if rdyToFetch is true
         if (rdyToFetch && (filter !== prevFilter || prices.min !== prevPrices.min || prices.max !== prevPrices.max || type !== prevType)) {
@@ -54,6 +65,18 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
     const handleChange = (productId: any) => {
         router.push('/product/' + productId);
     }
+
+    const handleLoadMore = () => {
+        if (hasMore) {
+            setOffset((prevOffset) => prevOffset + limit); // Increment offset
+        }
+    };
+
+    useEffect(() => {
+        if (rdyToFetch) {
+            fetchData();
+        }
+    }, [filter, prices, type, rdyToFetch, offset]);
 
     return (
         <>
@@ -134,6 +157,18 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
                                 </div>
                             </div>
                         ))}
+                        {hasMore && !loading && (
+                            <button
+                                onClick={handleLoadMore}
+                                className='w-full bg-custom-yellow text-white font-bold py-2 rounded-md hover:bg-yellow-600 transition-colors'
+                            >
+                                Load More
+                            </button>
+                        )}
+
+                        {loading && (
+                            <Skeleton height={40} width='100%' />
+                        )}
                     </div>
                 )}
         </>
