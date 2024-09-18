@@ -2,8 +2,10 @@
 import { createClient } from '@/utils/supabase/server';
 
 const restaurantFilter = async (restaurantEmail: string, userId: string, filter: string | undefined, priceFilter: any[], type: string, page: number, limit: number) => {
-    console.log("priceFilter")
-    console.log(priceFilter)
+    const productsWithImages = [];
+    const offset = (page - 1) * limit;
+
+
     const supabase = createClient();
 
     if (type === "combos") {
@@ -22,8 +24,6 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
 
 
             // Initialize an array to hold the combined product data
-            const productsWithImages = [];
-            const offset = (page - 1) * limit;
 
             // Iterate over each product to fetch associated images
             for (const product of products) {
