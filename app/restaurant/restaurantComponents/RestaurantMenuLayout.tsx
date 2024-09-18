@@ -25,12 +25,12 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
     const [hasMore, setHasMore] = useState(true);
 
     const fetchData = useCallback(async () => {
-        if (!rdyToFetch) return;
-
+        if (!rdyToFetch || !restaurantEmail || !userId) return;
+    
         setLoading(true);
         try {
             const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, page, itemsPerPage);
-
+    
             if (data) {
                 setProducts(prevProducts => {
                     // Only update if new data is returned
@@ -43,20 +43,28 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
         } finally {
             setLoading(false);
         }
-
-        // Check if filter or prices or type has changed
-        if (rdyToFetch && (filter !== prevFilter || prices.min !== prevPrices.min || prices.max !== prevPrices.max || type !== prevType)) {
-            fetchData();
+    }, [rdyToFetch, restaurantEmail, userId, filter, prices, type, page, itemsPerPage]);
+    
+    useEffect(() => {
+        // Check if any of the dependencies have changed
+        if (filter !== prevFilter || prices.min !== prevPrices.min || prices.max !== prevPrices.max || type !== prevType) {
+            // Update previous states
             setPrevFilter(filter);
             setPrevPrices(prices);
             setPrevType(type);
+            // Reset to the first page and fetch data
+            setPage(1);
+            fetchData(); // Fetch data with new filters
         }
-
-        // Fetch if products is empty and should be fetched
-        if (rdyToFetch && products.length === 0) {
+    }, [filter, prices, type, fetchData]);
+    
+    useEffect(() => {
+        // Fetch data initially or when page changes
+        if (page === 1 || products.length === 0) {
             fetchData();
         }
-    }, [filter, prices, type, rdyToFetch, restaurantEmail, userId, page, prevFilter, prevPrices, prevType]);
+    }, [page, fetchData]);
+    
 
     useEffect(() => {
         fetchData();
