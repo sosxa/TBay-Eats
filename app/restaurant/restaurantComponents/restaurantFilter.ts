@@ -1,7 +1,7 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
 
-const restaurantFilter = async (restaurantEmail: string, userId: string, filter: string | undefined, priceFilter: any[], type: string) => {
+const restaurantFilter = async (restaurantEmail: string, userId: string, filter: string | undefined, priceFilter: any[], type: string, page: number, limit: number) => {
     console.log("priceFilter")
     console.log(priceFilter)
     const supabase = createClient();
@@ -13,7 +13,6 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(9)
                 .range(offset, offset + limit - 1);
 
             if (productError) {
@@ -24,6 +23,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
 
             // Initialize an array to hold the combined product data
             const productsWithImages = [];
+            const offset = (page - 1) * limit;
 
             // Iterate over each product to fetch associated images
             for (const product of products) {
@@ -68,7 +68,6 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(9)
                 .range(offset, offset + limit - 1);
 
             if (productError) {
@@ -138,7 +137,6 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(9)
                 .range(offset, offset + limit - 1);
 
             if (productError) {
@@ -194,7 +192,6 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(9)
                 .range(offset, offset + limit - 1);
 
             if (productError) {

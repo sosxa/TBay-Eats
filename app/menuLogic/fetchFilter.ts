@@ -23,7 +23,6 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                 .from('combo_info')
                 .select('*')
                 .eq('active', true)
-                //  .limit(9);  // Add limit to fetch only 16 products
                 .range(offset, offset + limit - 1);
 
             if (productError) {
@@ -87,7 +86,6 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                 .from('combo_info')
                 .select('*')
                 .eq('active', true)
-                // .limit(9);  // Add limit to fetch only 16 products
                 .range(offset, offset + limit - 1);
 
             if (productError) {
@@ -169,7 +167,6 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                 .from('product_info')
                 .select('*')
                 .eq('active', true)
-                // .limit(9);  // Add limit to fetch only 16 products
                 .range(offset, offset + limit - 1);
 
             if (productError) {
@@ -243,7 +240,6 @@ const fetchFilter = async (filter: string | undefined, priceFilter: any[], type:
                 .from('product_info')
                 .select('*')
                 .eq('active', true)
-                // .limit(9);  // Add limit to fetch only 16 products
                 .range(offset, offset + limit - 1);
 
             if (productError) {

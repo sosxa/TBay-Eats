@@ -21,31 +21,29 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
     const [prevPrices, setPrevPrices] = useState<{ min: number; max: number }>(prices);
     const [prevType, setPrevType] = useState<'combos' | 'products'>(type);
     const [loading, setLoading] = useState<boolean>(false);
-    // const [products, setProducts] = useState<Product[]>([]);
-    const [hasMore, setHasMore] = useState<boolean>(true);
-    const [offset, setOffset] = useState<number>(0); // To track pagination offset
-    const limit = 9; // Number of items to fetch each time
-
     const router = useRouter();
+    const itemsPerPage = 9;
+    const [hasMore, setHasMore] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, offset, limit);
-
-                if (data.length < limit) {
-                    setHasMore(false); // No more items to load
+                const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type);
+                if (data && data.length < itemsPerPage) {
+                    setHasMore(false); // No more products to load
                 }
 
-                setProducts((prevProducts) => [...prevProducts, ...data]);
+                setProducts(prevData => {
+                    // If data is not empty, concatenate it with the existing prevData
+                    return data && data.length > 0 ? [...prevData, ...data] : prevData;
+                });
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching products:', error);
                 setLoading(false);
             }
         };
-
 
         // Fetch data on component mount if rdyToFetch is true
         if (rdyToFetch && (filter !== prevFilter || prices.min !== prevPrices.min || prices.max !== prevPrices.max || type !== prevType)) {
@@ -68,15 +66,9 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
 
     const handleLoadMore = () => {
         if (hasMore) {
-            setOffset((prevOffset) => prevOffset + limit); // Increment offset
+          setPage(prevPage => prevPage + 1);
         }
-    };
-
-    useEffect(() => {
-        if (rdyToFetch) {
-            fetchData();
-        }
-    }, [filter, prices, type, rdyToFetch, offset]);
+      };
 
     return (
         <>
@@ -157,17 +149,14 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
                                 </div>
                             </div>
                         ))}
-                        {hasMore && !loading && (
-                            <button
-                                onClick={handleLoadMore}
-                                className='w-full bg-custom-yellow text-white font-bold py-2 rounded-md hover:bg-yellow-600 transition-colors'
-                            >
-                                Load More
-                            </button>
-                        )}
-
-                        {loading && (
-                            <Skeleton height={40} width='100%' />
+                        {hasMore && (
+                            <div className="text-center mt-4">
+                                <button
+                                    onClick={handleLoadMore}
+                                    className="bg-custom-green hover:bg-custom-dark-green w-[50%] text-white px-4 py-2 rounded">
+                                    Load More
+                                </button>
+                            </div>
                         )}
                     </div>
                 )}
