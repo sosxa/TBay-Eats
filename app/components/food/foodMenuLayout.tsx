@@ -33,7 +33,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
         if (data && data.length < itemsPerPage) {
           setHasMore(false); // No more products to load
         }
-        setProducts(data ? data : []);
+        setProducts(prevData => data ? prevData + data : prevData + []);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
@@ -49,7 +49,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
 
   const handleLoadMore = () => {
     if (hasMore) {
-      setPage(prevPage => prevPage + 1);
+      setPage(prevPage => prevPage++);
     }
   };
 
@@ -207,7 +207,9 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
           ))}
           {hasMore && (
             <div className="text-center mt-4">
-              <button onClick={handleLoadMore} className="bg-blue-500 text-white px-4 py-2 rounded">
+              <button
+                onClick={handleLoadMore}
+                className="bg-blue-500 text-white px-4 py-2 rounded">
                 Load More
               </button>
             </div>
