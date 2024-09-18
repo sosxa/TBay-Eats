@@ -54,7 +54,7 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
 
   const handleLoadMore = () => {
     if (hasMore) {
-      setPage(prevPage => prevPage++);
+      setPage(prevPage => prevPage + 1);
     }
   };
 
