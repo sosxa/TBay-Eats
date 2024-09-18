@@ -21,6 +21,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
     const [prevPrices, setPrevPrices] = useState<{ min: number; max: number }>(prices);
     const [prevType, setPrevType] = useState<'combos' | 'products'>(type);
     const [loading, setLoading] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(1); // Track the current page
     const router = useRouter();
     const itemsPerPage = 9;
     const [hasMore, setHasMore] = useState(true);
@@ -29,7 +30,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type);
+                const data = await fetchFilter(filter, [prices.min, prices.max], type, page, itemsPerPage);
                 if (data && data.length < itemsPerPage) {
                     setHasMore(false); // No more products to load
                 }
