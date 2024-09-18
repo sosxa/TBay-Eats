@@ -25,22 +25,23 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
     const [hasMore, setHasMore] = useState(true);
 
     const fetchData = useCallback(async () => {
-        if (rdyToFetch) {
-            try {
-                setLoading(true);
-                const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, page, itemsPerPage);
-                if (data && data.length < itemsPerPage) {
-                    setHasMore(false); // No more products to load
-                }
+        if (!rdyToFetch) return;
 
-                setProducts(prevData => {
-                    return data && data.length > 0 ? [...(prevData || []), ...data] : prevData || [];
+        setLoading(true);
+        try {
+            const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, page, itemsPerPage);
+
+            if (data) {
+                setProducts(prevProducts => {
+                    // Only update if new data is returned
+                    return page === 1 ? data : [...prevProducts, ...data];
                 });
-            } catch (error) {
-                console.error('Error fetching products:', error);
-            } finally {
-                setLoading(false);
+                setHasMore(data.length === itemsPerPage);
             }
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        } finally {
+            setLoading(false);
         }
 
         // Check if filter or prices or type has changed
