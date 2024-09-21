@@ -5,6 +5,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
     console.log("priceFilter")
     console.log(priceFilter)
     const supabase = createClient();
+    const offset = (page - 1) * limit;
 
     if (type === "combos") {
         if (filter === "All") {
@@ -13,7 +14,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(9);
+                .range(offset, offset + limit - 1);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -67,7 +68,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(9);
+                .range(offset, offset + limit - 1);;
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -136,7 +137,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(9);
+                .range(offset, offset + limit - 1);;
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -191,7 +192,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .limit(9);
+                .range(offset, offset + limit - 1);;
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
