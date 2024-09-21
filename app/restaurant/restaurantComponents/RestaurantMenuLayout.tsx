@@ -195,7 +195,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
                 setLoading(true);
                 const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, page, itemsPerPage);
                 
-                if (data.length < itemsPerPage) {
+                if (data && data.length < itemsPerPage) {
                     setHasMore(false); // No more products to load
                 }
 
