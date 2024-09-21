@@ -24,11 +24,11 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
     const router = useRouter();
 
     useEffect(() => {
-        const fetchData = async () => {
+        if (rdyToFetch) {
             try {
                 setLoading(true);
                 const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, page, itemsPerPage);
-                
+
                 // Ensure data is an array
                 const productsArray = Array.isArray(data) ? data : [];
 
@@ -44,10 +44,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
             }
         };
 
-        // Fetch data only if ready
-        if (rdyToFetch) {
-            fetchData();
-        }
+
     }, [filter, prices, type, rdyToFetch, page]); // Add page to dependencies
 
     const handleChange = (productId: any) => {
