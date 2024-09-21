@@ -1,11 +1,9 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
 
-const restaurantFilter = async (restaurantEmail: string, userId: string, filter: string | undefined, priceFilter: any[], type: string, page: number, limit: number) => {
-    const productsWithImages = [];
-    const offset = (page - 1) * limit;
-
-
+const restaurantFilter = async (restaurantEmail: string, userId: string, filter: string | undefined, priceFilter: any[], type: string) => {
+    console.log("priceFilter")
+    console.log(priceFilter)
     const supabase = createClient();
 
     if (type === "combos") {
@@ -15,7 +13,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .range(offset, offset + limit - 1);
+                .limit(9);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -24,6 +22,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
 
 
             // Initialize an array to hold the combined product data
+            const productsWithImages = [];
 
             // Iterate over each product to fetch associated images
             for (const product of products) {
@@ -68,7 +67,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .range(offset, offset + limit - 1);
+                .limit(9);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -137,7 +136,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .range(offset, offset + limit - 1);
+                .limit(9);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
@@ -192,7 +191,7 @@ const restaurantFilter = async (restaurantEmail: string, userId: string, filter:
                 .select('*')
                 .eq("email", restaurantEmail)
                 .eq('active', true)
-                .range(offset, offset + limit - 1);
+                .limit(9);
 
             if (productError) {
                 throw new Error('Error fetching product data: ' + productError.message);
