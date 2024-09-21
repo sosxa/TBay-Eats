@@ -42,12 +42,11 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
                 console.error('Error fetching products:', error);
                 setLoading(false);
             }
-        };
-
-
-    }, [filter, prices, type, rdyToFetch, page]); // Add page to dependencies
+        }
+    }, [filter, prices, type, rdyToFetch, page]);
 
     useEffect(() => {
+        // Initial fetch for the first page
         fetchData();
     }, [fetchData]);
 
