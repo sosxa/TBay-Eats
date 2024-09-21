@@ -1,7 +1,7 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
 
-const restaurantFilter = async (restaurantEmail: string, userId: string, filter: string | undefined, priceFilter: any[], type: string) => {
+const restaurantFilter = async (restaurantEmail: string, userId: string, filter: string | undefined, priceFilter: any[], type: string, page: number, limit: number) => {
     console.log("priceFilter")
     console.log(priceFilter)
     const supabase = createClient();

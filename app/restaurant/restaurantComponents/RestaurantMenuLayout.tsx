@@ -21,13 +21,16 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
     const [prevPrices, setPrevPrices] = useState<{ min: number; max: number }>(prices);
     const [prevType, setPrevType] = useState<'combos' | 'products'>(type);
     const [loading, setLoading] = useState<boolean>(false);
+    const [hasMore, setHasMore] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(1); // Track the current page
     const router = useRouter();
+    const itemsPerPage = 9; // Number of items to fetch per page
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type);
+                const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type,page, itemsPerPage)
                 setProducts(data);
                 setLoading(false);
             } catch (error) {
@@ -53,6 +56,12 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
 
     const handleChange = (productId: any) => {
         router.push('/product/' + productId);
+    }
+
+    const handleLoadMore = () => {
+        if (hasMore) {
+            setPage(prevPage => prevPage + 1);
+        }
     }
 
     return (
@@ -136,6 +145,15 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
                         ))}
                     </div>
                 )}
+            {hasMore && (
+                <div className="text-center mt-4">
+                    <button
+                        onClick={handleLoadMore}
+                        className="bg-custom-green hover:bg-custom-dark-green w-[50%] text-white px-4 py-2 rounded">
+                        Load More
+                    </button>
+                </div>
+            )}
         </>
     );
 };
