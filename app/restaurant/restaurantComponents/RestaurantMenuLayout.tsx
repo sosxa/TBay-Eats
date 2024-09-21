@@ -47,6 +47,10 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
 
     }, [filter, prices, type, rdyToFetch, page]); // Add page to dependencies
 
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
     const handleChange = (productId: any) => {
         router.push('/product/' + productId);
     };
