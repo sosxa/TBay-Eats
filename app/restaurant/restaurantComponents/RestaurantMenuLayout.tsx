@@ -23,7 +23,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
 
     const router = useRouter();
 
-    useEffect(() => {
+    const fetchData = useCallback(async () => {
         if (rdyToFetch) {
             try {
                 setLoading(true);
