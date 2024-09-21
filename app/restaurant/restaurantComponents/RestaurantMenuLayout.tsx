@@ -194,13 +194,15 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
             try {
                 setLoading(true);
                 const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, page, itemsPerPage);
+                // making sure data is an array
+                const productsArray = Array.isArray(data) ? data : [];
                 
-                if (data && data.length < itemsPerPage) {
+                if (productsArray && productsArray.length < itemsPerPage) {
                     setHasMore(false); // No more products to load
                 }
 
                 // Concatenate the new products with the existing products
-                setProducts(prevData => [...prevData, ...data]);
+                setProducts(prevData => [...prevData, ...productsArray]);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching products:', error);
