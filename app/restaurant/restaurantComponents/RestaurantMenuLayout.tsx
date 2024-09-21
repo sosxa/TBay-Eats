@@ -16,7 +16,7 @@ interface FoodDivProps {
 }
 
 const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch, restaurantEmail, userId }) => {
-    const [products, setProducts] = useState<any[]>();
+    const [products, setProducts] = useState<any[]>([]);
     const [prevFilter, setPrevFilter] = useState<string>(filter);
     const [prevPrices, setPrevPrices] = useState<{ min: number; max: number }>(prices);
     const [prevType, setPrevType] = useState<'combos' | 'products'>(type);
