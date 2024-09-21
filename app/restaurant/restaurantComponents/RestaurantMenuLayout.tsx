@@ -29,24 +29,22 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
                 setLoading(true);
                 const data = await restaurantFilter(restaurantEmail, userId, filter, [prices.min, prices.max], type, page, itemsPerPage);
 
-                // Ensure data is an array
                 const productsArray = Array.isArray(data) ? data : [];
-
+                
                 if (productsArray.length < itemsPerPage) {
-                    setHasMore(false); // No more products to load
+                    setHasMore(false);
                 }
 
                 setProducts(prevData => [...prevData, ...productsArray]);
-                setLoading(false);
             } catch (error) {
                 console.error('Error fetching products:', error);
+            } finally {
                 setLoading(false);
             }
         }
     }, [filter, prices, type, rdyToFetch, page]);
 
     useEffect(() => {
-        // Initial fetch for the first page
         fetchData();
     }, [fetchData]);
 
@@ -56,7 +54,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
 
     const handleLoadMore = () => {
         if (hasMore) {
-            setPage(prevPage => prevPage + 1); // Increase the page to fetch more products
+            setPage(prevPage => prevPage + 1);
         }
     };
 
@@ -64,7 +62,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
         <>
             {loading ? (
                 <div className='w-full flex flex-wrap gap-2 md:gap-4 lg:gap-6 md:grid md:grid-cols-2 lg:grid-cols-3'>
-                    {Array.from({ length: 6 }).map((_, index) => (
+                    {Array.from({ length: itemsPerPage }).map((_, index) => (
                         <div key={index} className='w-full rounded-xl shadow-lg p-4 flex flex-col'>
                             <Skeleton height={300} width='100%' className='rounded-t-xl' />
                             <div className='w-full flex flex-col gap-2 pt-4'>
