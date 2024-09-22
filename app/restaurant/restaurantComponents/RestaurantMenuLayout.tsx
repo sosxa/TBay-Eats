@@ -159,7 +159,11 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
                     setHasMore(false);
                 }
 
-                setProducts(prevData => [...prevData, ...productsArray]);
+                // setProducts(prevData => [...prevData, ...productsArray]);
+                setProducts(prevData => {
+                    // If data is not empty, concatenate it with the existing prevData
+                    return productsArray && productsArray.length > 0 ? [...prevData, ...productsArray] : prevData;
+                });
             } catch (error) {
                 console.error('Error fetching products:', error);
             } finally {
