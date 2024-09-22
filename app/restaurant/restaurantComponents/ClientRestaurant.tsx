@@ -21,11 +21,10 @@ const ClientRestaurant: React.FC = () => {
         if (rdyToRedirect) {
             setRdyToFetch(true);
             setRdyToRedirect(false);
-        } else {
-            setRdyToFetch(false);
-            setRdyToRedirect(false);
+        } else if (rdyToFetch) {
+            setRdyToFetch(false); // Reset after fetch
         }
-    }, [rdyToRedirect]);
+    }, [rdyToRedirect, rdyToFetch]);
 
     useEffect(() => {
         // Define an async function inside the useEffect
