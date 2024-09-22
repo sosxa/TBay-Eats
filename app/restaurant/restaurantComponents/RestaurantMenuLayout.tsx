@@ -35,7 +35,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
                     setHasMore(false);
                 }
 
-                setProducts(prevData => page === 1 ? productsArray : [...prevData, ...productsArray]);
+                setProducts(prevData => [...prevData, ...productsArray]);
             } catch (error) {
                 console.error('Error fetching products:', error);
             } finally {
@@ -46,11 +46,7 @@ const RestaurantMenuLayout: React.FC<FoodDivProps> = ({ filter, prices, type, rd
 
     useEffect(() => {
         fetchData();
-        // Set rdyToFetch to false after fetching
-        if (rdyToFetch) {
-            setRdyToFetch(false);
-        }
-    }, [fetchData, rdyToFetch]);
+    }, [fetchData]);
 
     const handleChange = (productId: any) => {
         router.push('/product/' + productId);
