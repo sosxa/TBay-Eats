@@ -21,6 +21,9 @@ const ClientRestaurant: React.FC = () => {
         if (rdyToRedirect) {
             setRdyToFetch(true);
             setRdyToRedirect(false);
+        } else {
+            setRdyToFetch(false);
+            setRdyToRedirect(false);
         }
     }, [rdyToRedirect]);
 
