@@ -29,7 +29,7 @@ const DecideClient = () => {
     }, []); // Empty dependency array ensures this effect runs only once when the component mounts
 
     return (
-        <div>
+        <div className={!loading ? "mt-[10rem]" : "mt-0"}>
             {/* Render loading indicator if data is still being fetched */}
             {loading && (
                 <div className='pb-[10rem]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} 
