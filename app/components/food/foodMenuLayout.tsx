@@ -19,44 +19,25 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [asideOpen, setAsideOpen] = useState<boolean>(false);
   const router = useRouter();
-  const [page, setPage] = useState<number>(1); // Track the current page
-  const [hasMore, setHasMore] = useState(true);
   const { dispatch } = useCart();
-  const itemsPerPage = 9; // Number of items to fetch per page
-
 
   const fetchData = useCallback(async () => {
     if (rdyToFetch) {
       try {
         setLoading(true);
-        const data = await fetchFilter(filter, [prices.min, prices.max], type, page, itemsPerPage);
-        if (data && data.length < itemsPerPage) {
-          setHasMore(false); // No more products to load
-        }
-
-        setProducts(prevData => {
-          // If data is not empty, concatenate it with the existing prevData
-          return data && data.length > 0 ? [...prevData, ...data] : prevData;
-        });
+        const data = await fetchFilter(filter, [prices.min, prices.max], type);
+        setProducts(data ? data : []);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
         setLoading(false);
       }
     }
-  }, [filter, prices.min, prices.max, type, rdyToFetch, page]);
-
+  }, [filter, prices.min, prices.max, type, rdyToFetch]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-
-  const handleLoadMore = () => {
-    if (hasMore) {
-      setPage(prevPage => prevPage + 1);
-    }
-  };
 
   const handleChange = (productId: string) => {
     const route = type === 'combos' ? 'combo' : 'product';
@@ -114,12 +95,14 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
     setSelectedProduct(null);
   };
 
+  console.log("products");
+  console.log(products);
 
   return (
     <>
       {loading ? (
         <div className='w-full flex flex-wrap gap-2 md:gap-4 lg:gap-6 md:grid md:grid-cols-2 lg:grid-cols-3'>
-          {Array.from({ length: itemsPerPage }).map((_, index) => (
+          {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
               className='w-full rounded-xl shadow-lg p-4 flex flex-col'
@@ -210,18 +193,9 @@ const FoodDiv: React.FC<FoodDivProps> = ({ filter, prices, type, rdyToFetch }) =
               </div>
             </div>
           ))}
+        </div>
+      )}
 
-        </div>
-      )}
-      {hasMore && (
-        <div className="text-center mt-4">
-          <button
-            onClick={handleLoadMore}
-            className="bg-custom-green hover:bg-custom-dark-green w-[50%] text-white px-4 py-2 rounded">
-            Load More
-          </button>
-        </div>
-      )}
       {selectedProduct && (
         <SlidingAside
           isOpen={asideOpen}
