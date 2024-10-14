@@ -187,7 +187,7 @@ const ImageUploader = () => {
                                             height={275}
                                             src={defaultPfp}
                                             alt="default profile picture"
-                                            className="w-[275px] sm:w-[275px] lg:w-[275px] xl:w-[315px] h-[275px] sm:h-[275px] lg:h-[275px] xl:h-[315px] border-4 border-solid border-white rounded-full object-cover transition-opacity duration-200 ease-in-out md:-translate-y-20 -translate-y-10 xl:translate-y-[1.5rem] 2xl:translate-y-[1.3rem] 2xl:-translate-x-[7rem]"
+                                            className="w-[275px] sm:w-[275px] lg:w-[275px] xl:w-[315px] h-[275px] sm:h-[275px] lg:h-[275px] xl:h-[315px] border-4 border-solid border-white rounded-full object-cover transition-opacity duration-200 ease-in-out md:-translate-y-20 lg:translate-y-[10rem] xl:translate-y-[1.5rem] 2xl:translate-y-[1.3rem] 2xl:-translate-x-[7rem] mt-[7rem] sm:mt-[14rem]"
                                             onClick={() => setNewPfp(true)}
                                         />
                                     </div>
@@ -197,7 +197,7 @@ const ImageUploader = () => {
                                             src={ifDbPfp}
                                             width={275}
                                             height={275}
-                                            className="w-[275px] sm:w-[275px] lg:w-[275px] xl:w-[315px] h-[275px] sm:h-[275px] lg:h-[275px] xl:h-[315px] border-4 border-solid border-white rounded-full object-cover transition-opacity duration-200 ease-in-out md:-translate-y-20 -translate-y-10 xl:translate-y-[1.5rem] 2xl:translate-y-[1.3rem] 2xl:-translate-x-[7rem]"
+                                            className="w-[275px] sm:w-[275px] lg:w-[275px] xl:w-[315px] h-[275px] sm:h-[275px] lg:h-[275px] xl:h-[315px] border-4 border-solid border-white rounded-full object-cover transition-opacity duration-200 ease-in-out md:-translate-y-20 lg:translate-y-[10rem] xl:translate-y-[1.5rem] 2xl:translate-y-[1.3rem] 2xl:-translate-x-[7rem] mt-[7rem] sm:mt-[14rem]"
                                             alt="profile picture"
                                             onClick={() => setNewPfp(true)}
                                         />
