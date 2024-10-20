@@ -4,6 +4,22 @@ Project link: https://t-bay-eats.vercel.app/
 # Restaurant Owner <br />
 Email: testuser41215@gmail.com <br /> Password: testuser41215 <br />
 
+# Quick Demos 
+### Adding item to cart & checkout 
+https://imgur.com/a/XRdtBTL
+### Displaying CRUD operations for publishing products
+https://imgur.com/a/HKE2xDd
+### CRUD operations on uploading combos demo
+https://imgur.com/a/eZxaBcD
+### Signing into account demo
+https://imgur.com/a/1SCyWuI
+### Basic overview of owner profile
+https://imgur.com/a/cDb30dl
+### Searching for product demo
+https://imgur.com/a/l4DzD8C
+### Applying product, combo, and price filters demo
+https://imgur.com/a/8t9js9j
+
 ## Project Overview
 TBay Eats is a food catering and ordering platform designed for restaurant owners and consumers. Restaurant owners can register their establishments, list food items, combos, and sell directly to consumers. Both restaurant owners and consumers can customize their profiles by uploading a profile picture and banner.
 
